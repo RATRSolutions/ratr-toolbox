@@ -1,10 +1,10 @@
 # Project status – Verktøykasse
 
-_v1.2 – 2026-04-16_
+_v1.3 – 2026-04-16_
 
 ## Nåværende fase
 
-Fase 2 – Mappestruktur og navnekonvensjoner ⬜
+Fase 6 – Portere verktøyene inn 🔄
 
 ## Faseliste
 
@@ -15,8 +15,10 @@ Fase 2 – Mappestruktur og navnekonvensjoner ⬜
 | 3 | Versjonskontroll med Git og GitHub | ✅ Fullført |
 | 4 | Frontend og backend oppsett | ✅ Fullført |
 | 5 | Hello world og verifisering | ✅ Fullført |
-| 6 | Portere verktøyene inn | ⬜ Ikke startet |
+| 6 | Portere verktøyene inn | 🔄 Påbegynt |
 
 ## Neste steg
 
-- Portere verktøyene inn i verktøykassen (Fase 6)
+- Teste md-to-docx med ekte filer
+- Portere Læringsplan (HTML + JSON → React-komponent)
+- Bygge RFLP Viewer fra bunnen

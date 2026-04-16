@@ -1,6 +1,6 @@
 # Dev guide – Oppsettguide for nye prosjekter
 
-_v1.3 – 2026-04-16_
+_v1.4 – 2026-04-16_
 
 Denne guiden dokumenterer hvordan et prosjekt settes opp fra bunnen,
 steg for steg. Den er skrevet for å kunne gjenbrukes som mal i fremtidige
@@ -81,25 +81,105 @@ Separate repos gir mer overhead uten tilsvarende gevinst på dette stadiet.
 
 ## Fase 2 – Mappestruktur og navnekonvensjoner
 
-> Fylles inn når fasen er fullført.
+Opprett tomme mapper med `.gitkeep`-filer så Git sporer dem:
+
+```
+frontend/src/components/
+frontend/src/pages/
+frontend/src/assets/
+frontend/public/
+backend/src/routes/
+backend/src/controllers/
+backend/src/utils/
+backend/uploads/
+```
+
+Navnekonvensjoner:
+
+| Kontekst | Konvensjon | Eksempel |
+|----------|-----------|---------|
+| React-komponenter | PascalCase | `ToolCard.jsx` |
+| Andre JS-filer | camelCase | `parseExcel.js` |
+| CSS-moduler | PascalCase | `ToolCard.module.css` |
+| Backend-ruter/kontrollere | kebab-case | `file-upload.js` |
+| Mapper | kebab-case | `components/`, `file-upload/` |
+| Konstanter | UPPER_SNAKE_CASE | `MAX_FILE_SIZE` |
 
 ---
 
 ## Fase 3 – Versjonskontroll med Git og GitHub
 
-> Fylles inn når fasen er fullført.
+```bash
+# Installer GitHub CLI (WSL2/Ubuntu)
+sudo apt install gh -y
+gh auth login   # velg GitHub.com → HTTPS → Login with a web browser
+
+# Initialiser repo og første commit
+git init
+git add .
+git commit -m "Initial project structure and documentation"
+
+# Opprett privat GitHub-repo og push
+gh repo create <navn> --private --source=. --remote=origin --push
+```
+
+`.gitignore` bør inkludere: `node_modules/`, `.env`, `backend/uploads/*`, `dist/`, `*:Zone.Identifier`.
 
 ---
 
 ## Fase 4 – Frontend og backend oppsett
 
-> Fylles inn når fasen er fullført.
+**Frontend (React + Vite):**
+```bash
+cd frontend
+npm create vite@latest . -- --template react
+npm install
+```
+
+**Backend (Node.js + Express):**
+```bash
+cd backend
+npm init -y
+npm install express
+npm install --save-dev nodemon
+```
+
+Legg til scripts i `backend/package.json`:
+```json
+"start": "node src/index.js",
+"dev": "nodemon src/index.js"
+```
+
+**Vite proxy** – legg til i `frontend/vite.config.js` så `/api`-kall går til backend:
+```js
+server: {
+  proxy: {
+    '/api': 'http://localhost:3001',
+  },
+},
+```
 
 ---
 
 ## Fase 5 – Hello world og verifisering
 
-> Fylles inn når fasen er fullført.
+Opprett `backend/src/index.js` med en `/api/health`-rute:
+```js
+app.get('/api/health', (req, res) => {
+  res.json({ status: 'ok', message: 'Backend is running' });
+});
+```
+
+Oppdater `frontend/src/App.jsx` til å hente fra `/api/health` og vise svaret.
+
+Start begge serverne og bekreft at nettleseren viser "Backend is running":
+```bash
+# Terminal 1
+cd backend && npm run dev
+
+# Terminal 2
+cd frontend && npm run dev
+```
 
 ---
 
