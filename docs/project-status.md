@@ -13,10 +13,10 @@ Fase 2 – Mappestruktur og navnekonvensjoner ⬜
 | 1 | Planlegging og spesifikasjon | ✅ Fullført |
 | 2 | Mappestruktur og navnekonvensjoner | ✅ Fullført |
 | 3 | Versjonskontroll med Git og GitHub | ✅ Fullført |
-| 4 | Frontend og backend oppsett | ⬜ Ikke startet |
+| 4 | Frontend og backend oppsett | ✅ Fullført |
 | 5 | Hello world og verifisering | ⬜ Ikke startet |
 | 6 | Portere verktøyene inn | ⬜ Ikke startet |
 
 ## Neste steg
 
-- Sette opp frontend med React + Vite og backend med Node.js + Express (Fase 4)
+- Hello world og verifisering – bekrefte at frontend og backend kjører (Fase 5)
