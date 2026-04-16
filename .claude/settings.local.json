@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mkdir -p /home/tom/projects/toolbox/frontend/src/components /home/tom/projects/toolbox/frontend/src/pages /home/tom/projects/toolbox/frontend/src/assets /home/tom/projects/toolbox/frontend/public)",
+      "Bash(mkdir -p /home/tom/projects/toolbox/backend/src/routes /home/tom/projects/toolbox/backend/src/controllers /home/tom/projects/toolbox/backend/src/utils /home/tom/projects/toolbox/backend/uploads)",
+      "Bash(git --version)",
+      "Bash(gh --version)",
+      "Bash(gh auth:*)",
+      "Bash(git init:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)"
+    ]
+  }
+}
