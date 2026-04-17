@@ -18,7 +18,7 @@ function findFunction(nodes, id) {
 function RflpViewer() {
   const [file, setFile] = useState(null);
   const [selectedId, setSelectedId] = useState(null);
-  const { functions, sections, loading, error } = useRflpData(file);
+  const { functions, sections, linkedSheets, loading, error } = useRflpData(file);
 
   if (!file) {
     return <FileUpload onLoad={setFile} />;
@@ -56,7 +56,7 @@ function RflpViewer() {
         />
       </div>
       <div className="rflp-detail-panel">
-        <DetailPanel func={selectedFunc} sections={sections} />
+        <DetailPanel func={selectedFunc} sections={sections} linkedSheets={linkedSheets} />
       </div>
     </div>
   );

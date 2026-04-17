@@ -1,8 +1,41 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 
-function TreeNode({ node, selectedId, onSelect, depth }) {
-  const [expanded, setExpanded] = useState(depth < 2);
+function normalizeKey(k) {
+  return k.toLowerCase().replace(/\s+/g, '');
+}
+
+function getNodeStatus(node) {
+  if (!node.metadata) return null;
+  const key = Object.keys(node.metadata).find((k) => normalizeKey(k) === 'status');
+  return key ? node.metadata[key] : null;
+}
+
+function nodeOrDescendantMatchesFilter(node, filter) {
+  if (!filter) return true;
+  if (getNodeStatus(node) === filter) return true;
+  return node.children?.some((child) => nodeOrDescendantMatchesFilter(child, filter)) ?? false;
+}
+
+function collectStatuses(nodes, result = new Set()) {
+  nodes.forEach((node) => {
+    const s = getNodeStatus(node);
+    if (s) result.add(s);
+    if (node.children) collectStatuses(node.children, result);
+  });
+  return result;
+}
+
+function TreeNode({ node, selectedId, onSelect, depth, statusFilter }) {
+  const [expanded, setExpanded] = useState(false);
   const hasChildren = Array.isArray(node.children) && node.children.length > 0;
+
+  if (!nodeOrDescendantMatchesFilter(node, statusFilter)) return null;
+
+  const hasMatchingDescendant =
+    !!statusFilter &&
+    hasChildren &&
+    node.children.some((child) => nodeOrDescendantMatchesFilter(child, statusFilter));
+  const isExpanded = expanded || hasMatchingDescendant;
 
   return (
     <div className="tree-node-wrapper">
@@ -14,15 +47,15 @@ function TreeNode({ node, selectedId, onSelect, depth }) {
           className="tree-expand"
           onClick={() => setExpanded((e) => !e)}
           style={{ visibility: hasChildren ? 'visible' : 'hidden' }}
-          aria-label={expanded ? 'Kollaps' : 'Ekspander'}
+          aria-label={isExpanded ? 'Kollaps' : 'Ekspander'}
         >
-          {expanded ? '▼' : '▶'}
+          {isExpanded ? '▼' : '▶'}
         </button>
         <button className="tree-label" onClick={() => onSelect?.(node.id)}>
           {node.name || node.id}
         </button>
       </div>
-      {expanded && hasChildren && (
+      {isExpanded && hasChildren && (
         <div>
           {node.children.map((child) => (
             <TreeNode
@@ -31,6 +64,7 @@ function TreeNode({ node, selectedId, onSelect, depth }) {
               selectedId={selectedId}
               onSelect={onSelect}
               depth={depth + 1}
+              statusFilter={statusFilter}
             />
           ))}
         </div>
@@ -40,12 +74,35 @@ function TreeNode({ node, selectedId, onSelect, depth }) {
 }
 
 function FunctionTree({ functions = [], selectedId, onSelect, fileName }) {
+  const [statusFilter, setStatusFilter] = useState(null);
+
+  const statuses = useMemo(() => [...collectStatuses(functions)].sort(), [functions]);
+
   return (
     <div className="function-tree">
       <div className="tree-header">
         <span className="tree-header-label">Funksjoner</span>
         {fileName && <span className="tree-header-file">{fileName}</span>}
       </div>
+      {statuses.length > 0 && (
+        <div className="tree-filter">
+          <button
+            className={`tree-filter-btn${!statusFilter ? ' active' : ''}`}
+            onClick={() => setStatusFilter(null)}
+          >
+            Alle
+          </button>
+          {statuses.map((s) => (
+            <button
+              key={s}
+              className={`tree-filter-btn${statusFilter === s ? ' active' : ''}`}
+              onClick={() => setStatusFilter(statusFilter === s ? null : s)}
+            >
+              {s}
+            </button>
+          ))}
+        </div>
+      )}
       <div className="tree-body">
         {functions.length === 0 && (
           <p className="tree-empty">Ingen funksjoner funnet.</p>
@@ -57,6 +114,7 @@ function FunctionTree({ functions = [], selectedId, onSelect, fileName }) {
             selectedId={selectedId}
             onSelect={onSelect}
             depth={0}
+            statusFilter={statusFilter}
           />
         ))}
       </div>

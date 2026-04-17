@@ -14,6 +14,25 @@ function getFunctionIdKey(rows) {
   return Object.keys(rows[0]).find((k) => normalizeKey(k) === 'functionid') || null;
 }
 
+function parseSheetGeneric(sheet) {
+  const raw = XLSX.utils.sheet_to_json(sheet, { header: 1, defval: '' });
+  const headerIdx = raw.findIndex((row) => row.some((cell) => cell !== '' && cell != null));
+  if (headerIdx === -1) return [];
+  const headers = raw[headerIdx];
+  return raw
+    .slice(headerIdx + 1)
+    .filter((row) => row.some((cell) => cell !== '' && cell != null))
+    .map((row) => {
+      const obj = {};
+      headers.forEach((header, i) => {
+        let val = row[i] ?? null;
+        if (val instanceof Date) val = val.toLocaleDateString('nb-NO');
+        if (header) obj[header] = val;
+      });
+      return obj;
+    });
+}
+
 // Read sheet as raw arrays, find the header row with FunctionID, build objects manually
 function parseSheet(sheet) {
   const raw = XLSX.utils.sheet_to_json(sheet, { header: 1, defval: '' });
@@ -55,6 +74,7 @@ function buildTree(rows) {
 export function useRflpData(file) {
   const [functions, setFunctions] = useState([]);
   const [sections, setSections] = useState({});
+  const [linkedSheets, setLinkedSheets] = useState({});
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -67,6 +87,7 @@ export function useRflpData(file) {
     setError(null);
     setFunctions([]);
     setSections({});
+    setLinkedSheets({});
 
     const reader = new FileReader();
 
@@ -127,8 +148,17 @@ export function useRflpData(file) {
           }));
         });
 
+        const parsedLinkedSheets = {};
+        ['51_ConceptDecisions', '60_LogicalElements', '70_PhysicalElements'].forEach((sheetName) => {
+          const sheet = workbook.Sheets[sheetName];
+          if (!sheet || !sheet['!ref']) return;
+          const rows = parseSheetGeneric(sheet);
+          if (rows.length) parsedLinkedSheets[cleanSectionName(sheetName)] = rows;
+        });
+
         setFunctions(parsedFunctions);
         setSections(parsedSections);
+        setLinkedSheets(parsedLinkedSheets);
       } catch (err) {
         setError('Kunne ikke lese Excel-filen: ' + err.message);
       } finally {
@@ -150,5 +180,5 @@ export function useRflpData(file) {
     };
   }, [file]);
 
-  return { functions, sections, loading, error };
+  return { functions, sections, linkedSheets, loading, error };
 }
