@@ -21,6 +21,7 @@ Deployed ✅
 ## Deploy
 
 - **Platform:** Vercel (Hobby-plan, gratis)
+- **URL:** https://ratr-toolbox.vercel.app/
 - **Repo:** RATRSolutions/ratr-toolbox (GitHub)
 - **Auto-deploy:** Nye endringer på `main` deployes automatisk
 
