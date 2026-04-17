@@ -567,3 +567,41 @@
   color: #c8c5bf;
   line-height: 1.6;
 }
+
+.section-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 6px 16px 8px;
+  background: #1e1e1e;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.source-link {
+  appearance: none;
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: inherit;
+  font-size: inherit;
+  color: #c97a1a;
+  cursor: pointer;
+  text-decoration: underline;
+  text-decoration-color: rgba(201, 122, 26, 0.4);
+  text-underline-offset: 2px;
+}
+
+.source-link:hover {
+  color: #e88c20;
+  text-decoration-color: #e88c20;
+}
+
+@keyframes highlightFade {
+  0%   { background: rgba(201, 122, 26, 0.18); }
+  100% { background: transparent; }
+}
+
+.row-highlighted {
+  animation: highlightFade 2.5s ease-out forwards;
+  border-radius: 4px;
+}

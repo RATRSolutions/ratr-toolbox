@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 
 function nk(k) {
   return k.toLowerCase().replace(/\s+/g, '');
@@ -13,7 +13,7 @@ function findVal(row, normalizedName) {
   return col != null ? row[col] : null;
 }
 
-// ── Metadata (FunctionalIntent + chips) ───────────────────────────────────────
+// ── Metadata ──────────────────────────────────────────────────────────────────
 
 const EXCLUDED_META = new Set([
   'functionpath', 'owner', 'effectivefrom', 'effectiveto', 'iscurrent',
@@ -69,7 +69,11 @@ function SubfunctionsBlock({ children, onSelect }) {
       {open && (
         <div className="section-body">
           {children.map((child) => (
-            <button key={child.id} className="subfunction-item" onClick={() => onSelect?.(child.id)}>
+            <button
+              key={child.id}
+              className="subfunction-item"
+              onClick={() => onSelect?.(child.id)}
+            >
               <span className="node-id-tag">{child.id}</span>
               <span>{child.name || child.id}</span>
             </button>
@@ -86,12 +90,10 @@ const CD_SKIP = new Set([
   'conceptdecisionid', 'selectedconceptoptionid', 'selectedconceptname',
   'selectedconceptdescription',
 ]);
-
 const LE_SKIP = new Set([
   'logicalid', 'conceptdecisionid', 'logicalname', 'description',
   'parentid', 'owner', 'createddate', 'effectivefrom', 'effectiveto', 'iscurrent',
 ]);
-
 const PE_SKIP = new Set([
   'physicalid', 'logicalid', 'physicalname', 'description',
   'parentid', 'owner', 'createddate', 'effectivefrom', 'effectiveto', 'iscurrent',
@@ -120,9 +122,7 @@ function ElementCard({ row, nameKey, skipKeys, indent = false }) {
   );
 }
 
-function ConceptDecisionsBlock({ funcId, sections, linkedSheets }) {
-  const [open, setOpen] = useState(false);
-
+function ConceptDecisionsBlock({ funcId, sections, linkedSheets, isOpen, onToggle, blockRef, highlightId }) {
   const allocRows = sections['FunctionConceptAllocation'] ?? [];
   const cdRows = linkedSheets['ConceptDecisions'] ?? [];
   const leRows = linkedSheets['LogicalElements'] ?? [];
@@ -132,12 +132,12 @@ function ConceptDecisionsBlock({ funcId, sections, linkedSheets }) {
     ? Object.keys(allocRows[0]).find((k) => nk(k) !== 'functionid' && k !== 'functionId') ?? null
     : null;
 
-  const cdIds = new Set(
+  const cdIds = useMemo(() => new Set(
     allocRows
       .filter((r) => r.functionId === funcId)
       .map((r) => (cdIdColInAlloc ? String(r[cdIdColInAlloc] ?? '') : ''))
       .filter(Boolean)
-  );
+  ), [allocRows, funcId, cdIdColInAlloc]);
 
   if (cdIds.size === 0) return null;
 
@@ -149,12 +149,12 @@ function ConceptDecisionsBlock({ funcId, sections, linkedSheets }) {
   if (matchingCDs.length === 0) return null;
 
   return (
-    <div className="detail-section">
-      <button className="section-toggle" onClick={() => setOpen((o) => !o)}>
+    <div className="detail-section" ref={blockRef}>
+      <button className="section-toggle" onClick={onToggle}>
         <span className="section-title">Konseptbeslutninger ({matchingCDs.length})</span>
-        <span className={`chevron${open ? ' open' : ''}`}>›</span>
+        <span className={`chevron${isOpen ? ' open' : ''}`}>›</span>
       </button>
-      {open && (
+      {isOpen && (
         <div className="section-body">
           {matchingCDs.map((cd, i) => {
             const cdIdCol = findCol(cd, 'conceptdecisionid');
@@ -169,7 +169,10 @@ function ConceptDecisionsBlock({ funcId, sections, linkedSheets }) {
             });
 
             return (
-              <div key={cdId || i} className="cd-entry">
+              <div
+                key={cdId || i}
+                className={`cd-entry${highlightId === cdId ? ' row-highlighted' : ''}`}
+              >
                 <div className="cd-name">{cdName}</div>
                 {cdDesc && <div className="cd-description">{cdDesc}</div>}
                 {cdChips.length > 0 && (
@@ -192,13 +195,14 @@ function ConceptDecisionsBlock({ funcId, sections, linkedSheets }) {
                           const fk = findCol(pe, 'logicalid');
                           return fk && String(pe[fk] ?? '') === leId;
                         });
-
                         return (
                           <div key={leId}>
                             <ElementCard row={le} nameKey="logicalname" skipKeys={LE_SKIP} />
                             {matchingPEs.length > 0 && (
                               <div className="cd-sub-section" style={{ marginTop: 8, paddingLeft: 12 }}>
-                                <div className="cd-sublabel">Fysiske Elementer ({matchingPEs.length})</div>
+                                <div className="cd-sublabel">
+                                  Fysiske Elementer ({matchingPEs.length})
+                                </div>
                                 <div className="cd-sub-items">
                                   {matchingPEs.map((pe, m) => (
                                     <ElementCard
@@ -229,42 +233,53 @@ function ConceptDecisionsBlock({ funcId, sections, linkedSheets }) {
 
 // ── Kontekstbeskrivelser ───────────────────────────────────────────────────────
 
-const CTX_LABEL_KEYS = new Set(['contextid', 'contexttype', 'associatedrequirements']);
-const CTX_SKIP = new Set(['functionid', 'contextdescription']);
-
-function ContextDescriptionBlock({ rows }) {
-  const [open, setOpen] = useState(false);
+function ContextDescriptionBlock({ rows, ctxToReqIds, onNavigate, isOpen, onToggle, blockRef, highlightId }) {
   if (!rows.length) return null;
 
   return (
-    <div className="detail-section">
-      <button className="section-toggle" onClick={() => setOpen((o) => !o)}>
+    <div className="detail-section" ref={blockRef}>
+      <button className="section-toggle" onClick={onToggle}>
         <span className="section-title">Kontekstbeskrivelser ({rows.length})</span>
-        <span className={`chevron${open ? ' open' : ''}`}>›</span>
+        <span className={`chevron${isOpen ? ' open' : ''}`}>›</span>
       </button>
-      {open && (
+      {isOpen && (
         <div className="section-body">
           {rows.map((row, i) => {
+            const ctxId = String(findVal(row, 'contextid') ?? i);
             const desc = findVal(row, 'contextdescription');
-            const chips = Object.entries(row).filter(([k]) => {
-              const norm = nk(k);
-              return CTX_LABEL_KEYS.has(norm);
-            });
-            const stableKey = findVal(row, 'contextid') ?? String(i);
+            const ctxType = findVal(row, 'contexttype');
+            const linkedReqIds = ctxToReqIds[ctxId] ?? [];
 
             return (
-              <div key={stableKey} className="section-row" style={{ gap: 6 }}>
+              <div
+                key={ctxId}
+                className={`section-row${highlightId === ctxId ? ' row-highlighted' : ''}`}
+                style={{ gap: 6 }}
+              >
                 {desc && <div className="compact-main-text">{desc}</div>}
-                {chips.length > 0 && (
-                  <div className="meta-chips">
-                    {chips.map(([key, val]) => (
-                      <span key={key} className="meta-chip">
-                        <span className="meta-chip-key">{key}:</span>
-                        {String(val ?? '')}
-                      </span>
-                    ))}
-                  </div>
-                )}
+                <div className="meta-chips">
+                  <span className="meta-chip">
+                    <span className="meta-chip-key">ContextID:</span>
+                    {ctxId}
+                  </span>
+                  {ctxType && (
+                    <span className="meta-chip">
+                      <span className="meta-chip-key">ContextType:</span>
+                      {ctxType}
+                    </span>
+                  )}
+                  {linkedReqIds.length > 0 && (
+                    <span className="meta-chip">
+                      <span className="meta-chip-key">AssociatedRequirements:</span>
+                      <button
+                        className="source-link"
+                        onClick={() => onNavigate('req', linkedReqIds[0])}
+                      >
+                        {linkedReqIds[0]}
+                      </button>
+                    </span>
+                  )}
+                </div>
               </div>
             );
           })}
@@ -279,38 +294,94 @@ function ContextDescriptionBlock({ rows }) {
 const REQ_LABEL_KEYS = new Set([
   'requirementid', 'sourcetype', 'requirementcategory', 'verificationmethod', 'status',
 ]);
-const REQ_KEEP = new Set(['requirement', ...REQ_LABEL_KEYS]);
 
-function RequirementsBlock({ rows }) {
-  const [open, setOpen] = useState(false);
+function RequirementsBlock({ rows, onNavigate, isOpen, onToggle, blockRef, highlightId }) {
+  const [filterSourceType, setFilterSourceType] = useState(null);
+
+  const sourceTypes = useMemo(
+    () => [...new Set(rows.map((r) => String(findVal(r, 'sourcetype') ?? '')).filter(Boolean))].sort(),
+    [rows]
+  );
+
+  const filteredRows = filterSourceType
+    ? rows.filter((r) => String(findVal(r, 'sourcetype') ?? '') === filterSourceType)
+    : rows;
+
   if (!rows.length) return null;
 
   return (
-    <div className="detail-section">
-      <button className="section-toggle" onClick={() => setOpen((o) => !o)}>
-        <span className="section-title">Krav ({rows.length})</span>
-        <span className={`chevron${open ? ' open' : ''}`}>›</span>
+    <div className="detail-section" ref={blockRef}>
+      <button className="section-toggle" onClick={onToggle}>
+        <span className="section-title">
+          Krav ({filterSourceType ? `${filteredRows.length}/` : ''}{rows.length})
+        </span>
+        <span className={`chevron${isOpen ? ' open' : ''}`}>›</span>
       </button>
-      {open && (
+      {isOpen && sourceTypes.length > 1 && (
+        <div className="section-filters">
+          <button
+            className={`tree-filter-btn${!filterSourceType ? ' active' : ''}`}
+            onClick={() => setFilterSourceType(null)}
+          >
+            Alle
+          </button>
+          {sourceTypes.map((st) => (
+            <button
+              key={st}
+              className={`tree-filter-btn${filterSourceType === st ? ' active' : ''}`}
+              onClick={() => setFilterSourceType(filterSourceType === st ? null : st)}
+            >
+              {st}
+            </button>
+          ))}
+        </div>
+      )}
+      {isOpen && (
         <div className="section-body">
-          {rows.map((row, i) => {
+          {filteredRows.map((row, i) => {
+            const reqId = String(findVal(row, 'requirementid') ?? i);
             const req = findVal(row, 'requirement');
-            const chips = Object.entries(row).filter(([k]) => REQ_LABEL_KEYS.has(nk(k)));
-            const stableKey = findVal(row, 'requirementid') ?? String(i);
+            const sourceType = String(findVal(row, 'sourcetype') ?? '');
+            const sourceRef = String(findVal(row, 'sourceref') ?? '');
+
+            const isContextLink = sourceType === 'Context' && sourceRef;
+            const isConceptLink = sourceType === 'Concept' && sourceRef;
 
             return (
-              <div key={stableKey} className="section-row" style={{ gap: 6 }}>
+              <div
+                key={reqId}
+                className={`section-row${highlightId === reqId ? ' row-highlighted' : ''}`}
+                style={{ gap: 6 }}
+              >
                 {req && <div className="compact-main-text">{req}</div>}
-                {chips.length > 0 && (
-                  <div className="meta-chips">
-                    {chips.map(([key, val]) => (
-                      <span key={key} className="meta-chip">
-                        <span className="meta-chip-key">{key}:</span>
-                        {String(val ?? '')}
-                      </span>
-                    ))}
-                  </div>
-                )}
+                <div className="meta-chips">
+                  {Object.entries(row)
+                    .filter(([k]) => REQ_LABEL_KEYS.has(nk(k)))
+                    .map(([key, val]) => {
+                      const norm = nk(key);
+                      if (norm === 'sourcetype' && (isContextLink || isConceptLink)) {
+                        return (
+                          <span key={key} className="meta-chip">
+                            <span className="meta-chip-key">{key}:</span>
+                            <button
+                              className="source-link"
+                              onClick={() =>
+                                onNavigate(isContextLink ? 'ctx' : 'cd', sourceRef)
+                              }
+                            >
+                              {String(val ?? '')} → {sourceRef}
+                            </button>
+                          </span>
+                        );
+                      }
+                      return (
+                        <span key={key} className="meta-chip">
+                          <span className="meta-chip-key">{key}:</span>
+                          {String(val ?? '')}
+                        </span>
+                      );
+                    })}
+                </div>
               </div>
             );
           })}
@@ -320,56 +391,10 @@ function RequirementsBlock({ rows }) {
   );
 }
 
-// ── Hoved ─────────────────────────────────────────────────────────────────────
-
-const SKIP_SECTIONS = new Set([
-  'functionconceptallocation', 'requirements', 'contextdescription',
-]);
-
-function DetailPanel({ func, sections = {}, linkedSheets = {}, onSelect }) {
-  if (!func) {
-    return (
-      <div className="detail-panel detail-empty">
-        <p>Velg en funksjon i treet til venstre.</p>
-      </div>
-    );
-  }
-
-  const reqRows = (sections['Requirements'] ?? []).filter((r) => r.functionId === func.id);
-  const ctxRows = (sections['ContextDescription'] ?? []).filter((r) => r.functionId === func.id);
-
-  const otherSections = Object.entries(sections)
-    .filter(([title]) => !SKIP_SECTIONS.has(nk(title)))
-    .map(([title, rows]) => ({ title, rows: rows.filter((r) => r.functionId === func.id) }))
-    .filter(({ rows }) => rows.length > 0);
-
-  return (
-    <div className="detail-panel">
-      <div className="detail-header">
-        <p className="detail-id">{func.id}</p>
-        <h2 className="detail-name">{func.name}</h2>
-      </div>
-
-      <MetadataBlock metadata={func.metadata} />
-
-      <div className="detail-sections">
-        <SubfunctionsBlock children={func.children} onSelect={onSelect} />
-        <ConceptDecisionsBlock funcId={func.id} sections={sections} linkedSheets={linkedSheets} />
-        <ContextDescriptionBlock rows={ctxRows} />
-        <RequirementsBlock rows={reqRows} />
-        {otherSections.map(({ title, rows }) => (
-          <SectionBlock key={title} title={title} rows={rows} />
-        ))}
-      </div>
-    </div>
-  );
-}
-
 // ── Generisk seksjon (fallback) ────────────────────────────────────────────────
 
 function SectionBlock({ title, rows }) {
   const [open, setOpen] = useState(false);
-
   return (
     <div className="detail-section">
       <button className="section-toggle" onClick={() => setOpen((o) => !o)}>
@@ -398,6 +423,123 @@ function SectionBlock({ title, rows }) {
           })}
         </div>
       )}
+    </div>
+  );
+}
+
+// ── Hoved ─────────────────────────────────────────────────────────────────────
+
+const SKIP_SECTIONS = new Set([
+  'functionconceptallocation', 'requirements', 'contextdescription',
+]);
+
+function DetailPanel({ func, sections = {}, linkedSheets = {}, onSelect }) {
+  const [cdOpen, setCdOpen] = useState(false);
+  const [ctxOpen, setCtxOpen] = useState(false);
+  const [reqOpen, setReqOpen] = useState(false);
+  const [highlightCdId, setHighlightCdId] = useState(null);
+  const [highlightCtxId, setHighlightCtxId] = useState(null);
+  const [highlightReqId, setHighlightReqId] = useState(null);
+
+  const cdRef = useRef(null);
+  const ctxRef = useRef(null);
+  const reqRef = useRef(null);
+
+  useEffect(() => {
+    setCdOpen(false);
+    setCtxOpen(false);
+    setReqOpen(false);
+    setHighlightCdId(null);
+    setHighlightCtxId(null);
+    setHighlightReqId(null);
+  }, [func?.id]);
+
+  const navigate = useCallback((type, id) => {
+    const config = {
+      cd:  { setOpen: setCdOpen,  setHL: setHighlightCdId,  ref: cdRef },
+      ctx: { setOpen: setCtxOpen, setHL: setHighlightCtxId, ref: ctxRef },
+      req: { setOpen: setReqOpen, setHL: setHighlightReqId, ref: reqRef },
+    }[type];
+    if (!config) return;
+    config.setOpen(true);
+    config.setHL(id);
+    setTimeout(() => {
+      config.ref.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      setTimeout(() => config.setHL(null), 2500);
+    }, 60);
+  }, []);
+
+  if (!func) {
+    return (
+      <div className="detail-panel detail-empty">
+        <p>Velg en funksjon i treet til venstre.</p>
+      </div>
+    );
+  }
+
+  const reqRows = (sections['Requirements'] ?? []).filter((r) => r.functionId === func.id);
+  const ctxRows = (sections['ContextDescription'] ?? []).filter((r) => r.functionId === func.id);
+
+  const ctxToReqIds = useMemo(() => {
+    const map = {};
+    reqRows.forEach((req) => {
+      const sourceType = String(findVal(req, 'sourcetype') ?? '');
+      const sourceRef = String(findVal(req, 'sourceref') ?? '');
+      const reqId = String(findVal(req, 'requirementid') ?? '');
+      if (sourceType === 'Context' && sourceRef && reqId) {
+        if (!map[sourceRef]) map[sourceRef] = [];
+        map[sourceRef].push(reqId);
+      }
+    });
+    return map;
+  }, [reqRows]);
+
+  const otherSections = Object.entries(sections)
+    .filter(([title]) => !SKIP_SECTIONS.has(nk(title)))
+    .map(([title, rows]) => ({ title, rows: rows.filter((r) => r.functionId === func.id) }))
+    .filter(({ rows }) => rows.length > 0);
+
+  return (
+    <div className="detail-panel">
+      <div className="detail-header">
+        <p className="detail-id">{func.id}</p>
+        <h2 className="detail-name">{func.name}</h2>
+      </div>
+
+      <MetadataBlock metadata={func.metadata} />
+
+      <div className="detail-sections">
+        <SubfunctionsBlock children={func.children} onSelect={onSelect} />
+        <ConceptDecisionsBlock
+          funcId={func.id}
+          sections={sections}
+          linkedSheets={linkedSheets}
+          isOpen={cdOpen}
+          onToggle={() => setCdOpen((o) => !o)}
+          blockRef={cdRef}
+          highlightId={highlightCdId}
+        />
+        <ContextDescriptionBlock
+          rows={ctxRows}
+          ctxToReqIds={ctxToReqIds}
+          onNavigate={navigate}
+          isOpen={ctxOpen}
+          onToggle={() => setCtxOpen((o) => !o)}
+          blockRef={ctxRef}
+          highlightId={highlightCtxId}
+        />
+        <RequirementsBlock
+          rows={reqRows}
+          onNavigate={navigate}
+          isOpen={reqOpen}
+          onToggle={() => setReqOpen((o) => !o)}
+          blockRef={reqRef}
+          highlightId={highlightReqId}
+        />
+        {otherSections.map(({ title, rows }) => (
+          <SectionBlock key={title} title={title} rows={rows} />
+        ))}
+      </div>
     </div>
   );
 }
