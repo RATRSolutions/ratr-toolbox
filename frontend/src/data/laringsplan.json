@@ -1,0 +1,1175 @@
+{
+  "meta": {
+    "title": "Fra nybegynner til AI-drevet produktselskap",
+    "eyebrow": "Veikart for AI-assistert softwareutvikling",
+    "updatedLabel": "Oppdatert april 2026",
+    "stats": [
+      { "label": "4 faser" },
+      { "label": "2–4 år total varighet", "color": "p2" },
+      { "label": "Oppdatert april 2026", "color": "p3" },
+      { "label": "Nye moduler merket med NY", "color": "new" }
+    ]
+  },
+  "phases": [
+    {
+      "id": "fase1",
+      "number": 1,
+      "colorClass": "p1",
+      "eyebrow": "Fase 1",
+      "title": "Grunnmur",
+      "duration": "3–6 måneder",
+      "goal": "Mestre hvordan du bygger software med AI i praksis. Du skal ikke lære teknologi for teknologiens skyld – du skal lære å bruke AI-verktøy effektivt, lese og vurdere koden de produserer, og bygge ett konkret automatiseringsprosjekt fra idé til fungerende system. Fasens arbeidsmetode er en syklus du gjentar gjennom hele læringsplanen: <strong>Spesifiser → Prompt → Generer → Les → Test → Debug → Commit.</strong> Alle moduler i Fase 1 støtter ett eller flere steg i denne syklusen.",
+      "workflowSteps": [
+        { "step": "Spesifiser", "module": "Systemtenkning" },
+        { "step": "Prompt", "module": "AI Workflow" },
+        { "step": "Generer", "module": "AI Workflow" },
+        { "step": "Les", "module": "Python" },
+        { "step": "Test", "module": "Terminal + Git" },
+        { "step": "Debug", "module": "Debugging" },
+        { "step": "Commit", "module": "Terminal + Git" }
+      ],
+      "modules": [
+        {
+          "number": 0,
+          "title": "AI Development Workflow",
+          "subtitle": "Arbeidsmetoden du bruker fra dag 1 og alltid",
+          "duration": "1 uke",
+          "isNew": true,
+          "goal": "Etablere en systematisk arbeidsloop for AI-assistert utvikling som du bruker gjennom hele læringsplanen. Ikke en modul du fullfører og går videre fra – en vane du bygger fra første dag. Jo tidligere du internaliserer denne metoden, jo raskere lærer du alt annet.",
+          "topics": [
+            {
+              "text": "5-stegs arbeidsloop",
+              "note": "Spesifiser → Prompt → Generer → Les → Test → Debug → Commit. Denne syklusen er kjernen i all AI-assistert utvikling."
+            },
+            {
+              "text": "Strukturert prompting",
+              "note": "Kontekst (hva du holder på med) + oppgave (hva du vil ha) + krav (begrensninger) + output (format). Samme mal hver gang gir dramatisk bedre resultater."
+            },
+            {
+              "text": "Del opp oppgaver og start nye chatter",
+              "note": "Én stor oppgave til Claude Code = kaos og uventede endringer. Ti små = kontroll. Ny oppgave → ny chat med full kontekst."
+            },
+            {
+              "text": "Token-effektiv bruk",
+              "note": "Del kun relevante filer. Bruk CLAUDE.md for fast kontekst. Unngå å lime inn alt i hver melding."
+            },
+            {
+              "text": "Forstå alltid kode før du godkjenner den",
+              "note": "Ikke godkjenn blindt. Kjør koden. Les den. Kan du forklare hva den gjør? Hvis ikke – spør Claude om forklaring før du går videre."
+            }
+          ],
+          "resources": [
+            {
+              "tag": "Gratis",
+              "tagType": "free",
+              "title": "Anthropic – Claude Code dokumentasjon",
+              "url": "https://docs.anthropic.com/en/docs/claude-code/overview",
+              "note": "docs.anthropic.com – offisiell guide til hvordan Claude Code fungerer"
+            }
+          ],
+          "exercises": [
+            {
+              "title": "Morgenbrief – definer prosjektet",
+              "desc": "Du skal bygge en Morgenbrief: et system som hver morgen samler data fra kilder du velger, og sender deg et sammendrag på epost. Skriv ned svaret på tre spørsmål før du åpner Claude Code: Hvilke datakilder vil du ha med (velg én til å starte med)? Hva er minimum nyttig versjon – hva må være på plass for at brifingen er verdt å motta? Hva er definition of done for Fase 1?"
+            },
+            {
+              "title": "Første strukturerte prompt",
+              "desc": "Bruk promptmalen (kontekst + oppgave + krav + output) til å be Claude Code lage et minimalt Python-script som henter data fra én kilde og printer resultatet i terminalen. Eksempel-prompt: 'Kontekst: jeg bygger en morgenbrief-app i Python. Oppgave: lag et script som henter [din datakilde] via API. Krav: bruk requests-biblioteket, håndter feil hvis API-et er nede. Output: print dataene som lesbar tekst i terminalen.' Ikke vurder resultatet ennå – fokuser på malen og prosessen."
+            }
+          ]
+        },
+        {
+          "number": 1,
+          "title": "Arbeidsverktøy og sikkerhetsnett",
+          "subtitle": "Terminal, filsystem og Git – miljøet du jobber i",
+          "duration": "2–3 uker",
+          "isNew": false,
+          "goal": "Bli komfortabel nok i terminalen og med Git til at de aldri stopper deg. Terminal er stedet der du kjører kode, leser feil og verifiserer at ting fungerer. Git er sikkerhetsnettet som lar deg eksperimentere uten frykt – kritisk når Claude Code kan endre mange filer i ett jafs. Disse to hører naturlig sammen og læres parallelt.",
+          "topics": [
+            {
+              "text": "Navigere mapper og filer",
+              "note": "cd, ls, pwd, mkdir, rm, cp, mv – daglige kommandoer. Kjør alltid koden din fra riktig mappe."
+            },
+            {
+              "text": "Lese og forstå feilmeldinger i terminalen",
+              "note": "Permission denied, command not found, ModuleNotFoundError – hva de betyr og hva du gjør. Feilmeldingen er ikke fienden din, den er informasjon."
+            },
+            {
+              "text": "Kjøre og verifisere kode",
+              "note": "python script.py, lese output, bruke print() for å se hva som skjer. Terminal er der du tester hvert steg i debugging-loopen."
+            },
+            {
+              "text": "Git-grunnflyt: init, add, commit, status, log",
+              "note": "De fem kommandoene du bruker daglig. Commit etter hver meningsfull endring – ikke etter timer med arbeid."
+            },
+            {
+              "text": "Angre og rulle tilbake",
+              "note": "git checkout, revert, reset – det som gjør eksperimentering trygt. Øv på dette bevisst, ikke bare les om det."
+            },
+            {
+              "text": "Branching og GitHub",
+              "note": "Lag branch FØR du gir Claude Code store oppgaver. Push til GitHub for backup og versjonshistorikk i skyen."
+            },
+            {
+              "text": "WSL-spesifikke filstier",
+              "note": "/mnt/c/ – skillet mellom Windows og Linux-siden. Forstå dette én gang, unngå forvirring resten av læringen."
+            }
+          ],
+          "resources": [
+            {
+              "tag": "Gratis",
+              "tagType": "free",
+              "title": "The Odin Project – Command Line Basics",
+              "url": "https://www.theodinproject.com/lessons/foundations-command-line-basics",
+              "note": "theodinproject.com – grundig, praktisk, godt tempo"
+            },
+            {
+              "tag": "Gratis",
+              "tagType": "free",
+              "title": "Git – the simple guide (norsk)",
+              "url": "https://rogerdudler.github.io/git-guide/index.no.html",
+              "note": "rogerdudler.github.io – beste 10-minutters Git-intro som finnes"
+            },
+            {
+              "tag": "Gratis",
+              "tagType": "free",
+              "title": "Oh My Git! – lær Git som et spill",
+              "url": "https://ohmygit.org",
+              "note": "ohmygit.org – overraskende effektivt for å bygge Git-intuisjon"
+            },
+            {
+              "tag": "Verktøy",
+              "tagType": "tool",
+              "title": "GitLens – VSCode-utvidelse",
+              "url": "https://marketplace.visualstudio.com/items?itemName=eamodio.gitlens",
+              "note": "Visuell Git-historikk direkte i editoren"
+            }
+          ],
+          "exercises": [
+            {
+              "title": "Morgenbrief inn i Git",
+              "desc": "Ta scriptet Claude Code laget i Modul 0. Opprett en mappe kalt morgenbrief/, initialiser et Git-repo, legg til filen og gjør din første commit med meldingen 'init: hent data fra [kilde]'. Kjør scriptet fra terminalen og les output. Dette er steg 5 og 7 i arbeidsloopen i praksis."
+            },
+            {
+              "title": "Bevisst rollback",
+              "desc": "Be Claude Code gjøre en endring i morgenbrief-scriptet som du ikke vil ha. Øv på å rulle tilbake med git revert eller git checkout. Gjenta til det føles naturlig. Mål: eksperimentering skal aldri føles risikabelt."
+            },
+            {
+              "title": "Feilmeldingsdagbok",
+              "desc": "Opprett filen morgenbrief/FEIL.md. Hver gang du får en feilmelding du ikke forstår – lim den inn i Claude og be om forklaring på norsk. Skriv ned hva du lærte. Mål: 10 forklarte feilmeldinger i løpet av modulen."
+            }
+          ]
+        },
+        {
+          "number": 2,
+          "title": "Debugging med AI",
+          "subtitle": "Systematisk feilsøking – din viktigste praktiske ferdighet",
+          "duration": "1–2 uker",
+          "isNew": true,
+          "goal": "Lære å finne og fikse feil systematisk, ikke ved å gjette. Du lærer mer av kode som feiler enn kode som fungerer – men bare hvis du vet hvordan du angriper feilen. Denne modulen gir deg en metode du bruker resten av livet. AI er et kraftig verktøy i debugging, men bare hvis du stiller presise spørsmål.",
+          "topics": [
+            {
+              "text": "Debugging-loopen",
+              "note": "Problem → Forventning → Faktisk output → Årsak → Fix → Test. Ikke hopp direkte fra problem til fix. Forstå først."
+            },
+            {
+              "text": "Isolere feilen – minimal reproduksjon",
+              "note": "Fjern alt som ikke er nødvendig for å reprodusere feilen. En feil i 10 linjer er langt enklere å forstå enn en feil i 200 linjer."
+            },
+            {
+              "text": "Presis bruk av AI i debugging",
+              "note": "Gi AI: feilmeldingen, den relevante koden, og hva du forventet skulle skje. Ikke dump hele prosjektet. Spesifisitet gir presise svar."
+            },
+            {
+              "text": "Print og logging for å se hva som skjer",
+              "note": "print() er din beste venn. Legg til print-setninger for å se verdier underveis. Fjern dem (eller logg dem) når feilen er løst."
+            },
+            {
+              "text": "Endre én ting av gangen",
+              "note": "Hypotesetesting: formuler en hypotese, gjør én endring, test, evaluer. Endrer du flere ting samtidig vet du ikke hva som virket."
+            },
+            {
+              "text": "Forstå runtime-feil vs. logiske feil",
+              "note": "RuntimeError stopper programmet og gir feilmelding. Logisk feil kjører uten feil men gir feil svar – vanskeligere å oppdage, krever at du verifiserer output."
+            }
+          ],
+          "resources": [
+            {
+              "tag": "Gratis",
+              "tagType": "free",
+              "title": "Python Debugging – Real Python",
+              "url": "https://realpython.com/python-debugging-pdb/",
+              "note": "realpython.com – grundig intro til debugging i Python, inkludert pdb"
+            }
+          ],
+          "exercises": [
+            {
+              "title": "Introduser og fiks tre bevisste feil i Morgenbrief",
+              "desc": "Ta morgenbrief-scriptet. Introduser tre ulike typer feil: en syntaksfeil, en navnefeil (NameError) og en logisk feil (f.eks. feil enhet på en verdi). Debug dem én etter én med debugging-loopen. Skriv i FEIL.md: hva var feilen, hva forventet du, hva fikk du, hva var årsaken?"
+            },
+            {
+              "title": "Debug en ukjent feil",
+              "desc": "Be Claude Code legge inn en feil i morgenbrief-koden din uten å fortelle deg hva det er. Debug den systematisk. Bruk print-setninger, isoler feilen til minst mulig kodebit, og formuler en presis beskrivelse til Claude før du ber om hjelp."
+            }
+          ]
+        },
+        {
+          "number": 3,
+          "title": "Systemtenkning og spesifikasjon",
+          "subtitle": "Spesifiser grundig – AI-en din koder det du beskriver",
+          "duration": "2–3 uker",
+          "isNew": true,
+          "goal": "Lære å tenke strukturert om hva som skal bygges FØR noen skriver en linje kode. Med AI som koder for deg forskyves din verdi hit: evnen til å definere problemet presist. En god spesifikasjon er ikke byråkratisk overhead – det er det som skiller kode som gjør det du vil fra kode som gjør noe annet. Bedre spesifikasjon = bedre kode fra første forsøk.",
+          "topics": [
+            {
+              "text": "Kravanalyse – hva skal systemet faktisk gjøre?",
+              "note": "Skill mellom brukerhistorier (hva brukeren trenger) og tekniske krav (hva systemet må gjøre). Bruk formatet: 'Som [bruker] vil jeg [handling] slik at [verdi]'"
+            },
+            {
+              "text": "Systemdesign og dataflyt",
+              "note": "Tegn komponentene og pilene mellom dem FØR du koder. Hva er inn- og utganger? Hvilke data flyter hvor? Dette er grunnlaget for prompts til Claude Code."
+            },
+            {
+              "text": "Teknisk spesifikasjon som AI-input",
+              "note": "Skriv spesifikasjonen slik at Claude Code kan begynne å kode uten å improvisere. Jo tydeligere du er om datamodeller, logikk og forventede outputs, jo bedre kode."
+            },
+            {
+              "text": "Definition of Done",
+              "note": "Hva betyr det at en feature er ferdig? Skriftlig kriterium per oppgave forhindrer scope creep og uklare forventninger mot AI og mot deg selv."
+            },
+            {
+              "text": "ADR – Architecture Decision Records",
+              "note": "Korte dokumenter som forklarer hvorfor du valgte løsningen du valgte. Uvurderlig når du vil forstå egne valg seks måneder senere."
+            }
+          ],
+          "resources": [
+            {
+              "tag": "Gratis",
+              "tagType": "free",
+              "title": "Shape Up – Basecamp's produktutviklingsmetode",
+              "url": "https://basecamp.com/shapeup",
+              "note": "basecamp.com – gratis bok, praktisk tilnærming til å definere og avgrense arbeid"
+            },
+            {
+              "tag": "Gratis",
+              "tagType": "free",
+              "title": "Architecture Decision Records – intro",
+              "url": "https://adr.github.io",
+              "note": "adr.github.io – enkelt format for å dokumentere tekniske valg og begrunnelse"
+            }
+          ],
+          "exercises": [
+            {
+              "title": "Morgenbrief-spesifikasjon",
+              "desc": "Skriv en fullstendig spesifikasjon for Morgenbrief: brukerhistorie ('Som meg selv vil jeg motta en epost kl. 07:00 slik at...'), krav (hvilke datakilder, hvilket format, hvilke feilscenarioer), dataflyt tegnet som en enkel diagram, og definition of done. Gi spesifikasjonen til Claude Code og sammenlign koden du får med scriptet fra Modul 0. Hva er forskjellen i kvalitet og presisjon?"
+            },
+            {
+              "title": "Spesifiser bakover",
+              "desc": "Ta morgenbrief-koden slik den ser ut nå. Skriv spesifikasjonen du burde ha skrevet FØR du begynte. Er det avvik mellom spesifikasjonen og det som faktisk er bygd? Dokumenter avvikene som åpne punkter."
+            }
+          ]
+        },
+        {
+          "number": 4,
+          "title": "Python grunnlag",
+          "subtitle": "Lese, forstå og debugge AI-generert kode",
+          "duration": "4–6 uker",
+          "isNew": false,
+          "goal": "Du skal ikke bli Python-ekspert – du skal bli en god kvalitetssikrer og feilsøker. Nok kunnskap til å lese hva koden gjør, forstå feilmeldinger, oppdage logiske feil, og kommunisere presist med AI om hva som skal endres. Fokus er på lesing og forståelse, ikke skriving.",
+          "topics": [
+            {
+              "text": "Datatyper og variabler",
+              "note": "Tall, tekst, lister, ordbøker – byggesteinene. Forstå typefeilen før du fikser den."
+            },
+            {
+              "text": "Kontrollflyt: if/else, for-løkker, while",
+              "note": "Forstå hva koden gjør steg for steg. Kan du spore en verdi gjennom en løkke manuelt?"
+            },
+            {
+              "text": "Funksjoner og feilhåndtering",
+              "note": "try/except, returnverdier – hva kan gå galt og hvem håndterer det? Les feilhåndtering i AI-generert kode kritisk."
+            },
+            {
+              "text": "Filer, pakker og pip",
+              "note": "Installere og bruke eksterne biblioteker. Forstå hva pakken gjør – ikke bare at den er installert."
+            },
+            {
+              "text": "JSON og databehandling",
+              "note": "Lese og skrive JSON – grunnlag for alt API-arbeid. Bruk print() for å inspisere JSON-struktur du ikke kjenner."
+            },
+            {
+              "text": "Runtime-feil og unntakstyper",
+              "note": "TypeError, ValueError, KeyError, AttributeError – de vanligste Python-feilene. Kjenn dem igjen og forstå hva de betyr."
+            }
+          ],
+          "resources": [
+            {
+              "tag": "Gratis",
+              "tagType": "free",
+              "title": "Automate the Boring Stuff with Python",
+              "url": "https://automatetheboringstuff.com",
+              "note": "automatetheboringstuff.com – gratis å lese online, svært praktisk og relevant for automatisering"
+            },
+            {
+              "tag": "Gratis",
+              "tagType": "free",
+              "title": "Python.org – offisiell tutorial",
+              "url": "https://docs.python.org/3/tutorial/",
+              "note": "docs.python.org – tørr, men alltid oppdatert og presis"
+            },
+            {
+              "tag": "Verktøy",
+              "tagType": "tool",
+              "title": "Replit – kjør Python i nettleseren",
+              "url": "https://replit.com",
+              "note": "replit.com – ingen installasjon nødvendig for å eksperimentere"
+            }
+          ],
+          "exercises": [
+            {
+              "title": "Forklar morgenbrief-koden linje for linje",
+              "desc": "Ta morgenbrief-scriptet som det er nå. Be Claude forklare hver funksjon på norsk. Les forklaringen til du kan gjengi hva koden gjør uten å se på den. Test deg selv: lukk forklaringen og forklar koden høyt."
+            },
+            {
+              "title": "Endre én ting og forutsig utfallet",
+              "desc": "Ta morgenbrief-scriptet. Endre én verdi, betingelse eller linje. Forutsig hva som skjer FØR du kjører koden. Kjør og sjekk. Var du riktig? Gjenta 10 ganger med ulike endringer."
+            },
+            {
+              "title": "Legg til én ny datakilde",
+              "desc": "Utvid Morgenbrief med én ekstra datakilde ved hjelp av Python-ferdighetene du nå har. Claude Code skriver – men du leser, forstår og kan forklare hvordan de to datakildene slås sammen til én datastruktur."
+            }
+          ]
+        },
+        {
+          "number": 5,
+          "title": "API-er, databaser og kommunikasjonsmønstre",
+          "subtitle": "Hvordan systemer snakker med hverandre – og hvordan du designer dataen de deler",
+          "duration": "3–4 uker",
+          "isNew": false,
+          "goal": "Forstå de fundamentale konseptene bak all moderne systemkommunikasjon og datalagring. Dette er kunnskapen som lar deg lese og vurdere arkitekturen AI foreslår – ikke bare koden. Tre spørsmål du skal kunne svare på etter denne modulen: Hvordan skal systemene mine kommunisere? Hvordan skal dataen struktureres? Hva skjer når noe feiler?",
+          "topics": [
+            {
+              "text": "REST, HTTP og JSON",
+              "note": "Grunnlaget for alt som kommuniserer over nett. Forstå request/response-syklusen fullt ut."
+            },
+            {
+              "text": "Polling vs. webhooks vs. websockets",
+              "note": "Tre fundamentalt ulike kommunikasjonsmønstre. Polling: du spør gjentatte ganger. Webhook: systemet varsler deg når noe skjer. WebSocket: toveis sanntidsforbindelse. Feil valg her påvirker hele arkitekturen."
+            },
+            {
+              "text": "Webhooks i praksis",
+              "note": "Motta hendelser fra eksterne systemer (Stripe-betaling, GitHub-push, Slack-melding). Du registrerer en URL, de sender en POST-request til deg. Forstå payload-strukturen og behovet for å verifisere avsender."
+            },
+            {
+              "text": "HTTP-statuskoder og feilsøking av API-kall",
+              "note": "200 OK, 400 Bad Request, 401 Unauthorized, 404 Not Found, 500 Server Error – hva de betyr og hva du gjør. Feilkoden er informasjon, ikke bare en blokkering."
+            },
+            {
+              "text": "Datamodellering – design før du koder",
+              "note": "Tegn tabellene og relasjonene mellom dem FØR du skriver en linje kode. Hva er én-til-mange? Mange-til-mange? En dårlig datamodell er vanskelig å fikse i etterkant."
+            },
+            {
+              "text": "SQL-grunnlag",
+              "note": "SELECT, WHERE, JOIN, INSERT, UPDATE. Ikke for å skrive det manuelt, men for å lese og vurdere spørringer AI genererer. Kan du forstå hva en JOIN gjør?"
+            },
+            {
+              "text": "SQLite – enkle databaser",
+              "note": "Tabeller, rader, kolonner – ingen serverinstallasjon. Bruk DB Browser for SQLite til å inspisere databasen visuelt."
+            },
+            {
+              "text": "Miljøvariabler",
+              "note": "Lagre API-nøkler trygt – aldri hardkod dem i koden. Forstå .env-filer og python-dotenv."
+            }
+          ],
+          "resources": [
+            {
+              "tag": "Gratis",
+              "tagType": "free",
+              "title": "MDN Web Docs – HTTP overview",
+              "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Overview",
+              "note": "developer.mozilla.org – autoritativ og lesbar"
+            },
+            {
+              "tag": "Gratis",
+              "tagType": "free",
+              "title": "SQLite Tutorial",
+              "url": "https://www.sqlitetutorial.net",
+              "note": "sqlitetutorial.net – enkleste database å starte med"
+            },
+            {
+              "tag": "Gratis",
+              "tagType": "free",
+              "title": "Webhook.site – test webhooks uten server",
+              "url": "https://webhook.site",
+              "note": "webhook.site – få en unik URL, se innkommende webhook-kall direkte i nettleseren. Perfekt for å forstå hva som sendes."
+            },
+            {
+              "tag": "Verktøy",
+              "tagType": "tool",
+              "title": "Hoppscotch – test API-er visuelt",
+              "url": "https://hoppscotch.io",
+              "note": "hoppscotch.io – gratis i nettleseren, se eksakt hva API-et returnerer"
+            },
+            {
+              "tag": "Verktøy",
+              "tagType": "tool",
+              "title": "DB Browser for SQLite",
+              "url": "https://sqlitebrowser.org",
+              "note": "sqlitebrowser.org – visuell inspektor for SQLite-databaser, ingen SQL-skriving nødvendig"
+            }
+          ],
+          "exercises": [
+            {
+              "title": "Hent og feilsøk Morgenbrief-data via API",
+              "desc": "Bruk Hoppscotch til å teste API-kallene Morgenbrief bruker. Introduser med vilje en feil i URL-en og les statuskoden. Hva forteller 404 vs. 401 vs. 500? Forstå nøyaktig hva som sendes og mottas."
+            },
+            {
+              "title": "Webhook-mottak – forstå mønsteret",
+              "desc": "Bruk webhook.site til å motta et simulert kall. Inspiser headers, body og signatur. Svar skriftlig: Hvis Morgenbrief skulle trigges av en ekstern hendelse i stedet for cron – hva ville du brukt, polling eller webhook, og hvorfor?"
+            },
+            {
+              "title": "Datamodell for Morgenbrief",
+              "desc": "Tegn datamodellen på papir: hvilke tabeller trenger du (brifer, datakilder, leveranser?), hvilke felt, hvilke relasjoner? Gi tegningen til Claude Code som spesifikasjon og sammenlign med skjemaet det genererer."
+            },
+            {
+              "title": "Lagre og hent brifdata",
+              "desc": "Lagre dagens data fra Morgenbrief i SQLite. Skriv tre SQL-spørringer med Claude Code: hent alle brifer fra siste uke, hent kun brifer der en bestemt kilde er inkludert, sett inn en ny rad. Les og forstå hver spørring."
+            }
+          ]
+        },
+        {
+          "number": 6,
+          "title": "FastAPI – bygg ditt første API",
+          "subtitle": "Automatiseringsprosjektet får et endepunkt – og kjører alene",
+          "duration": "2–3 uker",
+          "isNew": true,
+          "goal": "Avslutte Fase 1 med noe konkret som fungerer autonomt: automatiseringsprosjektet ditt eksponert som et API og kjørende på et fast tidspunkt uten at du gjør noe. Det betyr at du også må tenke på hva som skjer når det feiler – idempotens og retry-logikk er ikke valgfrie i automatiserte systemer.",
+          "topics": [
+            {
+              "text": "Lag enkle API-endepunkter (GET og POST)",
+              "note": "Hent og send data over HTTP. Automatiseringsprosjektet ditt blir et endepunkt."
+            },
+            {
+              "text": "Strukturerte outputs med Pydantic-modeller",
+              "note": "Definer nøyaktig hva API-et returnerer. Pydantic gir automatisk validering og tydelige feilmeldinger."
+            },
+            {
+              "text": "Automatisk API-dokumentasjon",
+              "note": "FastAPI genererer /docs og /redoc ut av boksen – ekstremt nyttig for å forstå og teste ditt eget API."
+            },
+            {
+              "text": "Logging og enkel feilhåndtering",
+              "note": "Legg til logging fra start. Vet du hva som skjer i API-et ditt? HTTPException for presise feilmeldinger til kalleren."
+            },
+            {
+              "text": "Tidsstyring med cron",
+              "note": "Cron-syntaks: 0 9 * * 1-5 betyr kl. 09:00 mandag–fredag. Forstå de fem feltene (minutt, time, dag, måned, ukedag). Dette er hvordan automatiseringsprosjektet kjører av seg selv."
+            },
+            {
+              "text": "Idempotens – design for feil",
+              "note": "Hvis jobben kjører to ganger, skal resultatet være det samme. Kritisk for automatiserte systemer: hva skjer hvis cron-jobben trigger dobbelt? Design endepunkter og databaseoperasjoner slik at gjentatt kjøring ikke skaper duplikater eller feil."
+            },
+            {
+              "text": "Retry-logikk og feilhåndtering i automatiserte flyter",
+              "note": "Hva skjer når et eksternt API er nede kl. 09:00? Prøv på nytt med eksponentiell backoff. Varsle deg selv ved gjentatt feil. Ikke la systemet feile stille."
+            },
+            {
+              "text": "Koble alt sammen",
+              "note": "Ekstern data inn → SQLite for lagring → FastAPI-endepunkt ut → cron for tidsstyring. Dette er et komplett automatisert system."
+            }
+          ],
+          "resources": [
+            {
+              "tag": "Gratis",
+              "tagType": "free",
+              "title": "FastAPI – offisiell tutorial",
+              "url": "https://fastapi.tiangolo.com/tutorial/",
+              "note": "fastapi.tiangolo.com – en av de beste dokumentasjonene som finnes"
+            },
+            {
+              "tag": "Gratis",
+              "tagType": "free",
+              "title": "Real Python – FastAPI intro",
+              "url": "https://realpython.com/fastapi-python-web-apis/",
+              "note": "realpython.com – svært praktisk og konkret"
+            },
+            {
+              "tag": "Gratis",
+              "tagType": "free",
+              "title": "SendGrid – epost-API for utviklere",
+              "url": "https://sendgrid.com/docs/for-developers/sending-email/api-getting-started/",
+              "note": "sendgrid.com – gratis tier (100 epost/dag), enkleste måte å sende epost programmatisk"
+            }
+          ],
+          "exercises": [
+            {
+              "title": "Morgenbrief som API med epostlevering",
+              "desc": "Tre steg som binder hele Fase 1 sammen. Steg 1: bygg et FastAPI-endepunkt GET /brief som returnerer dagens morgenbrief som JSON med logging på hvert kall. Steg 2: legg til POST /send som henter data, formaterer brifingen og sender den til deg på epost via SendGrid eller tilsvarende. Steg 3: sett opp en cron-jobb (0 7 * * 1-5) som kaller /send automatisk kl. 07:00 hver hverdag. Tenk gjennom idempotens: hva skjer hvis cron-jobben trigger to ganger samme morgen? Bygg inn en sjekk. Claude Code bygger – du leser, forstår og kan forklare hele flyten."
+            }
+          ],
+          "milestone": "Morgenbriefen leveres automatisk på epost kl. 07:00 hver hverdag. Den henter data fra minst to kilder, lagrer hver brif i SQLite, og er tilgjengelig via et FastAPI-endepunkt. Kodebasen er i Git med 30+ commits. Du har skrevet en fullstendig kravspesifikasjon og debugget minst fem reelle feil systematisk. Du kan forklare hele systemet – fra datakilde til innboks – uten å se på koden."
+        }
+      ]
+    },
+    {
+      "id": "fase2",
+      "number": 2,
+      "colorClass": "p2",
+      "eyebrow": "Fase 2",
+      "title": "LLM-utvikling og første produkt",
+      "duration": "6–12 måneder",
+      "goal": "Gå fra å forstå kode til å levere noe reelt til en reell bruker. Du lærer å bygge AI-drevne applikasjoner med LLM-APIer, deploye dem i skyen, og lande din første kunde eller bruker. Ingenting lærer deg mer enn ekte forventninger.",
+      "modules": [
+        {
+          "number": 1,
+          "title": "LLM App Development",
+          "subtitle": "Bygge AI-drevne applikasjoner med modell-APIer",
+          "duration": "3–4 uker",
+          "isNew": true,
+          "goal": "Forstå hva som skjer 'under panseret' i AI-drevne produkter. Dette er kjernen i å bygge produktene dine – prompt design, strukturerte outputs og function calling er det som skiller hobbyprosjekter fra profesjonell programvare.",
+          "topics": [
+            {
+              "text": "Prompt design og system prompts",
+              "note": "Context management, feilhåndtering, retry-logikk"
+            },
+            {
+              "text": "Structured outputs med JSON schema",
+              "note": "Få AI til å returnere data i forutsigbart format"
+            },
+            {
+              "text": "Function calling / tool use",
+              "note": "La AI-en kalle eksterne funksjoner og API-er"
+            },
+            {
+              "text": "Streaming responses",
+              "note": "Vis svar etterhvert som de genereres – bedre brukeropplevelse"
+            },
+            {
+              "text": "Token, kostnad og latency",
+              "note": "Forstå hva som driver kostnad og responstid i produksjon"
+            },
+            {
+              "text": "Prompt injection – grunnleggende forsvar",
+              "note": "Sikkerhetshull du må kjenne til før du setter noe i produksjon"
+            }
+          ],
+          "resources": [
+            {
+              "tag": "Gratis",
+              "tagType": "free",
+              "title": "Anthropic – Prompt Engineering docs",
+              "url": "https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/overview",
+              "note": "docs.anthropic.com – autoritativ kilde for Claude-spesifikk utvikling"
+            },
+            {
+              "tag": "Gratis",
+              "tagType": "free",
+              "title": "OpenAI Cookbook",
+              "url": "https://cookbook.openai.com",
+              "note": "cookbook.openai.com – praktiske eksempler, gjelder konseptuelt for alle LLM-er"
+            },
+            {
+              "tag": "Gratis",
+              "tagType": "free",
+              "title": "DeepLearning.AI – Short Courses",
+              "url": "https://www.deeplearning.ai/short-courses/",
+              "note": "deeplearning.ai – mange gratis, svært konkrete og oppdaterte"
+            }
+          ],
+          "exercises": [
+            {
+              "title": "Morgenbrief får en stemme",
+              "desc": "Send dataene Morgenbrief samler til Claude API. Design en system prompt som forteller Claude hvem du er og hva brifingen skal fokusere på. Be om strukturert JSON tilbake med feltene: sammendrag (2–3 setninger), viktigste punkt, og én anbefalt handling for dagen. Sammenlign output fra to ulike system prompts – hvilken gir mest nyttig brif?"
+            },
+            {
+              "title": "Vag vs. presis prompt",
+              "desc": "Gi Claude API morgenbrief-dataene med to ulike prompts – én vag ('lag et sammendrag') og én presis (med kontekst, format og eksempel på ønsket output). Dokumenter forskjellen i kvalitet systematisk."
+            }
+          ]
+        },
+        {
+          "number": 2,
+          "title": "Frontend – JavaScript, React og alternativer",
+          "subtitle": "Bygg brukergrensesnitt som faktisk ser bra ut",
+          "duration": "4–6 uker",
+          "isNew": true,
+          "goal": "En backend uten frontend er et API – nyttig, men ikke et produkt folk bruker. Her lærer du grunnlaget i JavaScript og de viktigste rammeverkene for å bygge moderne brukergrensesnitt. Fokuset er på å forstå hva Claude Code produserer – ikke nødvendigvis å skrive alt selv.",
+          "topics": [
+            {
+              "text": "JavaScript-grunnlag",
+              "note": "Variabler, funksjoner, asynkronitet (async/await), DOM-manipulasjon – fundamentet alt annet bygger på"
+            },
+            {
+              "text": "TypeScript – JavaScript med typer",
+              "note": "Fanger feil tidlig og gjør kode langt mer lesbar. Industristandard i 2025. Lær dette parallelt med JS."
+            },
+            {
+              "text": "React – komponentbasert UI",
+              "note": "Det mest utbredte rammeverket. Komponenter, props, state og hooks er konsepter du møter overalt. Anbefalt startpunkt."
+            },
+            {
+              "text": "Next.js – React i produksjon",
+              "note": "Bygger på React og legger til routing, server-side rendering og enkel deployment. Mye brukt for SaaS-produkter."
+            },
+            {
+              "text": "Alternativer: Vue og Svelte",
+              "note": "Vue er enklere å starte med enn React. Svelte kompilerer bort rammeverket og gir svært rask kode. Verdt å kjenne til, men velg React som primærspråk."
+            },
+            {
+              "text": "Tailwind CSS – utility-first styling",
+              "note": "Industristandard for rask og konsistent styling. Brukes sammen med React og Next.js i de fleste moderne prosjekter."
+            }
+          ],
+          "resources": [
+            {
+              "tag": "Gratis",
+              "tagType": "free",
+              "title": "The Odin Project – Full Stack JavaScript",
+              "url": "https://www.theodinproject.com/paths/full-stack-javascript",
+              "note": "theodinproject.com – strukturert og grundig, fra JS-grunnlag til React"
+            },
+            {
+              "tag": "Gratis",
+              "tagType": "free",
+              "title": "React – offisiell dokumentasjon",
+              "url": "https://react.dev",
+              "note": "react.dev – ny og svært lesbar offisiell dok med interaktive eksempler"
+            },
+            {
+              "tag": "Gratis",
+              "tagType": "free",
+              "title": "Next.js – Learn-kurs",
+              "url": "https://nextjs.org/learn",
+              "note": "nextjs.org – offisielt interaktivt kurs, bygger en app steg for steg"
+            },
+            {
+              "tag": "Gratis",
+              "tagType": "free",
+              "title": "TypeScript Handbook",
+              "url": "https://www.typescriptlang.org/docs/handbook/intro.html",
+              "note": "typescriptlang.org – offisiell og lesbar innføring"
+            }
+          ],
+          "exercises": [
+            {
+              "title": "Morgenbrief-dashboard",
+              "desc": "Bygg et React-grensesnitt med to visninger: dagens brif (hentet live fra FastAPI) og historikk (alle tidligere brifer fra SQLite, sortert nyeste først). Claude Code bygger – du leser, forstår og kan forklare komponentstrukturen. Morgenbrief er nå et komplett system: datakilder → Python → SQLite → FastAPI → Claude API → React → epost."
+            },
+            {
+              "title": "Komponent-anatomien",
+              "desc": "Ta morgenbrief-dashboardets hovedkomponent. Tegn på papir: hva er props, hva er state, hva rendres, hvilke API-kall gjøres og når? Gjør dette for tre ulike komponenter i grensesnittet."
+            }
+          ]
+        },
+        {
+          "number": 3,
+          "title": "Backend-språk utover Python",
+          "subtitle": "Når Python ikke er riktig verktøy – og hva du velger da",
+          "duration": "2–3 uker",
+          "isNew": true,
+          "goal": "Python er utmerket for AI/ML-arbeid og skripting, men ikke alltid det beste valget for produksjonsbackend. Denne modulen gir deg et kart over alternativene – ikke for å lære dem alle, men for å forstå når og hvorfor du ville valgt noe annet.",
+          "topics": [
+            {
+              "text": "Node.js og TypeScript som backend",
+              "note": "Bruk samme språk på frontend og backend. Svært populært for API-er og sanntidsapplikasjoner. Naturlig valg hvis du allerede kan JavaScript."
+            },
+            {
+              "text": "Kotlin – moderne JVM-backend",
+              "note": "Statisk typet, svært lesbart og interoperabelt med Java. Populært for enterprise-backend og Android. Ktor og Spring Boot er vanlige rammeverk. Velg dette hvis du bygger tunge, langtlevende systemer."
+            },
+            {
+              "text": "Go – enkelt og svært raskt",
+              "note": "Minimalistisk språk laget for backend og mikrotjenester. Rask kompilering, lavt minnebruk. Populært i infrastruktur og høytrafikkerte API-er."
+            },
+            {
+              "text": "Når du velger hva",
+              "note": "Python: AI/ML, scripting, raske prototyper. Node/TypeScript: full-stack JS, sanntid. Kotlin: enterprise, Android, JVM-interop. Go: ytelseskritiske backend-tjenester, infrastruktur."
+            }
+          ],
+          "resources": [
+            {
+              "tag": "Gratis",
+              "tagType": "free",
+              "title": "Kotlin – offisiell tour",
+              "url": "https://kotlinlang.org/docs/kotlin-tour-welcome.html",
+              "note": "kotlinlang.org – interaktiv innføring, ingen installasjon nødvendig"
+            },
+            {
+              "tag": "Gratis",
+              "tagType": "free",
+              "title": "Node.js – Getting Started",
+              "url": "https://nodejs.org/en/learn/getting-started/introduction-to-nodejs",
+              "note": "nodejs.org – offisiell intro til Node som backend-plattform"
+            },
+            {
+              "tag": "Gratis",
+              "tagType": "free",
+              "title": "Go – A Tour of Go",
+              "url": "https://go.dev/tour/",
+              "note": "go.dev – interaktiv innføring i Go, direkte i nettleseren"
+            }
+          ],
+          "exercises": [
+            {
+              "title": "Samme API, to språk",
+              "desc": "Bygg det enkleste mulige API-endepunktet (én rute som returnerer JSON) i både Python/FastAPI og Node.js/TypeScript. Sammenlign: hva er likt, hva er ulikt, hva foretrekker du og hvorfor?"
+            }
+          ]
+        },
+        {
+          "number": 4,
+          "title": "Deployment og sky",
+          "subtitle": "Få applikasjonen din live på internett",
+          "duration": "3–4 uker",
+          "isNew": false,
+          "goal": "En applikasjon som bare kjører på din laptop er ikke et produkt. Lær å pakke, deploye og kjøre applikasjoner slik at andre kan bruke dem – og at de faktisk er oppe når de skal være det.",
+          "topics": [
+            {
+              "text": "Docker – containerisering",
+              "note": "Pakk applikasjonen slik at den kjører likt overalt"
+            },
+            {
+              "text": "Enkel sky-deployment",
+              "note": "Railway, Render eller Azure – velg én og bli god på den"
+            },
+            {
+              "text": "Bakgrunnsjobber og tidsstyring",
+              "note": "Kjør automatiseringsprosjektet ditt på fast tidspunkt automatisk"
+            },
+            {
+              "text": "Logging og feilsporing",
+              "note": "Vet du hva som skjer i appen din etter deployment?"
+            },
+            {
+              "text": "Auth og API-nøkkelhåndtering i produksjon",
+              "note": "Hvem har tilgang til hva – og hvordan styrer du det"
+            }
+          ],
+          "resources": [
+            {
+              "tag": "Gratis",
+              "tagType": "free",
+              "title": "Docker – Getting Started",
+              "url": "https://docs.docker.com/get-started/",
+              "note": "docs.docker.com – offisiell og grundig intro"
+            },
+            {
+              "tag": "Gratis",
+              "tagType": "free",
+              "title": "Railway – enkleste deployment-plattform",
+              "url": "https://railway.app",
+              "note": "railway.app – deploy med én kommando, gratis tier tilgjengelig"
+            },
+            {
+              "tag": "Gratis",
+              "tagType": "free",
+              "title": "Render – alternativ til Railway",
+              "url": "https://render.com",
+              "note": "render.com – god for FastAPI og Python-apper"
+            }
+          ],
+          "exercises": [
+            {
+              "title": "Morgenbrief live i skyen",
+              "desc": "Deploy hele Morgenbrief-stacken i skyen: FastAPI-backend og cron-jobb i én Docker-container, React-dashboard som statisk hosting. Brifingen skal sendes på epost kl. 07:00 uten at din laptop er på. Test logging og feilhåndtering i produksjon: skru av én datakilde og verifiser at du får varsling i stedet for en stille feil. Dette er sluttpunktet for Morgenbrief som læreprosjekt – og starten på noe du faktisk bruker daglig."
+            }
+          ]
+        },
+        {
+          "number": 5,
+          "title": "Microservices og containerorkestrering",
+          "subtitle": "Når én stor app ikke lenger er riktig arkitektur",
+          "duration": "2–3 uker",
+          "isNew": true,
+          "goal": "Forstå hva microservices faktisk er, når det gir mening (og når det ikke gjør det), og hvilke verktøy som brukes for å kjøre flere tjenester sammen. Viktig advarsel: microservices er ikke løsningen på et enkelt problem – de løser skalerbarhet og teamorganisering på bekostning av kompleksitet. Start alltid med én samlet applikasjon (monolitt) og del opp kun når du har en god grunn.",
+          "topics": [
+            {
+              "text": "Monolitt vs. microservices – hva er forskjellen?",
+              "note": "En monolitt er én samlet applikasjon. Microservices er mange små, uavhengige tjenester. Begge har sin plass."
+            },
+            {
+              "text": "Docker Compose – kjør flere tjenester lokalt",
+              "note": "Definer og start flere Docker-containere med én kommando. Standard verktøy for lokal utvikling med microservices."
+            },
+            {
+              "text": "Kubernetes – orkestrering i produksjon",
+              "note": "Industristandard for å kjøre og skalere containeriserte applikasjoner. Bratt læringskurve – vurder managed tjenester (Azure AKS, Google GKE) fremfor å sette opp selv."
+            },
+            {
+              "text": "Alternativer til Kubernetes",
+              "note": "Docker Swarm (enklere), Fly.io, Railway og Render (managed, mye enklere) – for de fleste startups er disse tilstrekkelige lenge."
+            },
+            {
+              "text": "Service communication og API gateway",
+              "note": "Hvordan snakker tjenestene med hverandre? REST, gRPC, message queues (RabbitMQ, Kafka) – og API gateway som felles inngangspunkt."
+            }
+          ],
+          "resources": [
+            {
+              "tag": "Gratis",
+              "tagType": "free",
+              "title": "Docker Compose – offisiell guide",
+              "url": "https://docs.docker.com/compose/gettingstarted/",
+              "note": "docs.docker.com – start her, ikke med Kubernetes"
+            },
+            {
+              "tag": "Gratis",
+              "tagType": "free",
+              "title": "Kubernetes – offisiell intro",
+              "url": "https://kubernetes.io/docs/tutorials/kubernetes-basics/",
+              "note": "kubernetes.io – interaktiv tutorial i nettleseren"
+            },
+            {
+              "tag": "Gratis",
+              "tagType": "free",
+              "title": "Martin Fowler – Microservices",
+              "url": "https://martinfowler.com/articles/microservices.html",
+              "note": "martinfowler.com – den opprinnelige artikkelen som definerte begrepet"
+            }
+          ],
+          "exercises": [
+            {
+              "title": "To tjenester, én Compose-fil",
+              "desc": "Del automatiseringsprosjektet i to: én tjeneste henter data, én tjeneste kjører AI-analysen. Koble dem med Docker Compose. Mål: forstå meldingsflyten mellom dem."
+            }
+          ]
+        },
+        {
+          "number": 6,
+          "title": "Grunnleggende sikkerhet",
+          "subtitle": "Det du ikke kan vente med å lære",
+          "duration": "1–2 uker",
+          "isNew": false,
+          "goal": "Ikke bli ekspert på sikkerhet – men kjenne de vanligste fallgruvene. Én sikkerhetsbrist i et produkt kan ødelegge tilliten du har bygd. Lær nok til å unngå de åpenbare feilene – og nok til å lese og vurdere sikkerhetskritisk kode AI genererer.",
+          "topics": [
+            {
+              "text": "Autentisering – passord og tokens",
+              "note": "Passordlagring med bcrypt (aldri klartekst), JWT-tokens, sessions. Forstå hva som lagres hvor og hva som skjer ved et datainnbrudd."
+            },
+            {
+              "text": "OAuth 2.0 – 'Logg inn med Google'",
+              "note": "Hvordan det faktisk fungerer: authorization code flow, access tokens, refresh tokens. De fleste produkter trenger dette. Misforståelser her skaper sikkerhetshull. Forstå flyten FØR du ber Claude Code implementere den."
+            },
+            {
+              "text": "API-nøkler vs. tokens vs. sessions – når bruker du hva",
+              "note": "API-nøkler for maskin-til-maskin. Sessions for nettleserbrukere. JWT for statsløse API-er. Valget påvirker arkitekturen."
+            },
+            {
+              "text": "HTTPS og sikker kommunikasjon",
+              "note": "Aldri send sensitiv data ukryptert. Forstå hva TLS gjør og ikke gjør."
+            },
+            {
+              "text": "Vanlige angrepsvektorer",
+              "note": "SQL injection, XSS, CSRF – kjenn de vanligste. Les OWASP Top 10 som en sjekkliste, ikke en lærebok."
+            },
+            {
+              "text": "Sikker håndtering av hemmeligheter",
+              "note": "API-nøkler i miljøvariabler og secrets managers – aldri i Git. Roter nøkler regelmessig."
+            }
+          ],
+          "resources": [
+            {
+              "tag": "Gratis",
+              "tagType": "free",
+              "title": "OWASP Top 10",
+              "url": "https://owasp.org/www-project-top-ten/",
+              "note": "owasp.org – de ti vanligste sikkerhetsfeilene i webapplikasjoner"
+            },
+            {
+              "tag": "Gratis",
+              "tagType": "free",
+              "title": "OAuth 2.0 – enkelt forklart",
+              "url": "https://www.oauth.com/oauth2-servers/background/",
+              "note": "oauth.com – den beste lesbare forklaringen på OAuth-flyten"
+            }
+          ],
+          "exercises": []
+        },
+        {
+          "number": 7,
+          "title": "Første produkt og marked",
+          "subtitle": "Fra prototype til første kunde",
+          "duration": "Løpende",
+          "isNew": false,
+          "goal": "Lande én ekte bruker eller kunde. Ikke en perfekt versjon av produktet – en versjon som er god nok til at noen velger å bruke den. Ekte tilbakemeldinger er uerstattelige.",
+          "topics": [
+            {
+              "text": "En-sides produktbeskrivelse per idé",
+              "note": "Problem, betalingsvilje, minimum som gir verdi (MVP)"
+            },
+            {
+              "text": "Velg B2B eller B2C – og begrunne valget",
+              "note": "B2B anbefales som første marked: færre kunder, klarere problemer"
+            },
+            {
+              "text": "Bygg mot én spesifikk første bruker",
+              "note": "Ekte forventninger og tilbakemeldinger lærer deg mer enn 100 tutorials"
+            }
+          ],
+          "resources": [],
+          "exercises": [],
+          "milestone": "Du har et produkt live i skyen som en ekte bruker faktisk bruker. Du vet hva som kreves for å vedlikeholde og oppdatere det. Du har fått minst én konkret tilbakemelding fra en bruker du ikke kjenner."
+        }
+      ]
+    },
+    {
+      "id": "fase3",
+      "number": 3,
+      "colorClass": "p3",
+      "eyebrow": "Fase 3",
+      "title": "Profesjonalisering",
+      "duration": "1–2 år",
+      "goal": "Gå fra å lage ting som fungerer til å levere software du selv stoler fullt på – og som kunder kan stole på. Testing, arkitektur, overvåkning og avanserte AI-teknikker (RAG og agents) gjør deg i stand til å ta betalt for kvalitet, ikke bare funksjonalitet.",
+      "modules": [
+        {
+          "number": 1,
+          "title": "RAG – la AI søke i egne data",
+          "subtitle": "Bygg systemer som bruker dine dokumenter og databaser",
+          "duration": "3–4 uker",
+          "isNew": true,
+          "goal": "RAG (Retrieval-Augmented Generation) er teknikken som lar AI svare basert på dine egne data – ikke bare det den er trent på. Dette er grunnlaget for mange B2B-produkter: 'chat med dine dokumenter', 'søk i vår kunnskapsbase', osv.",
+          "topics": [
+            {
+              "text": "Embeddings og semantisk søk",
+              "note": "Hvordan AI finner relevant innhold i store dokumentsamlinger"
+            },
+            {
+              "text": "Vektordatabaser",
+              "note": "Chroma, Pinecone – lagre og søke i embeddings effektivt"
+            },
+            {
+              "text": "Chunking-strategier og metadata",
+              "note": "Dele opp dokumenter effektivt for best mulig søkeresultat"
+            },
+            {
+              "text": "Hallusinasjon og grounding",
+              "note": "Sørge for at AI svarer basert på faktiske data, ikke dikter"
+            },
+            {
+              "text": "LlamaIndex eller LangChain",
+              "note": "Rammeverk som forenkler bygging av RAG-systemer"
+            }
+          ],
+          "resources": [
+            {
+              "tag": "Gratis",
+              "tagType": "free",
+              "title": "LlamaIndex – RAG tutorial",
+              "url": "https://docs.llamaindex.ai/en/stable/getting_started/starter_example/",
+              "note": "docs.llamaindex.ai – svært lesbar kom-i-gang-guide"
+            },
+            {
+              "tag": "Gratis",
+              "tagType": "free",
+              "title": "DeepLearning.AI – Building & Evaluating RAG",
+              "url": "https://www.deeplearning.ai/short-courses/building-evaluating-advanced-rag/",
+              "note": "deeplearning.ai – konkret og kort kurs"
+            },
+            {
+              "tag": "Gratis",
+              "tagType": "free",
+              "title": "Chroma – lokal vektordatabase",
+              "url": "https://www.trychroma.com",
+              "note": "trychroma.com – enklest å starte med, kjører lokalt"
+            }
+          ],
+          "exercises": [
+            {
+              "title": "Dokument-chat",
+              "desc": "Bygg en RAG-pipeline som lar deg stille spørsmål til et PDF-dokument og få svar basert på innholdet. Naturlig videreføring av automatiseringsprosjektet – nå med semantisk søk."
+            }
+          ]
+        },
+        {
+          "number": 2,
+          "title": "Agents, workflows og evaluering",
+          "subtitle": "Agentic AI – når det faktisk gir mening",
+          "duration": "4–6 uker",
+          "isNew": true,
+          "goal": "Lære å bygge og evaluere agentic AI-systemer – og viktigere: forstå når det ikke er den riktige løsningen. Strukturerte data → tradisjonelt program. Ustrukturert input + skjønn → agent.",
+          "topics": [
+            {
+              "text": "Agent-design og verktøyvalg",
+              "note": "Hvilke tools skal agenten ha tilgang til? Prinsippet om minste privilegium"
+            },
+            {
+              "text": "State management i agenter",
+              "note": "Huske kontekst mellom steg uten å miste kontrollen"
+            },
+            {
+              "text": "Feilhåndtering i agent-loops",
+              "note": "Hva skjer når agenten tar feil beslutning midt i en prosess?"
+            },
+            {
+              "text": "Multi-step workflows",
+              "note": "Kjede flere steg med kontroll og observerbarhet"
+            },
+            {
+              "text": "Evaluering og testing av AI-systemer",
+              "note": "Hvordan vet du at agenten faktisk gjør det riktige? Eval-harness."
+            }
+          ],
+          "resources": [
+            {
+              "tag": "Gratis",
+              "tagType": "free",
+              "title": "Anthropic – Building Effective Agents",
+              "url": "https://www.anthropic.com/research/building-effective-agents",
+              "note": "anthropic.com – autoritativ guide fra de som bygde Claude"
+            },
+            {
+              "tag": "Gratis",
+              "tagType": "free",
+              "title": "LangChain – Agents dokumentasjon",
+              "url": "https://python.langchain.com/docs/modules/agents/",
+              "note": "python.langchain.com – praktisk rammeverk for agent-bygging"
+            }
+          ],
+          "exercises": [],
+          "judgement": {
+            "title": "Bruk agent kun når input er genuint uforutsigbar",
+            "text": "Et automatisert system som henter fast data på fast tidspunkt er ikke en agent – det er et tradisjonelt program, og det er riktig valg. En agent som håndterer ustrukturerte nyhetshendelser og må ta skjønnsmessige beslutninger gir mening. Denne regelen sparer deg for mye bortkastet kompleksitet og kostnad."
+          }
+        },
+        {
+          "number": 3,
+          "title": "Testing og kodekvalitet",
+          "subtitle": "Stol på koden AI skriver for deg",
+          "duration": "3–4 uker",
+          "isNew": false,
+          "goal": "Automatiserte tester er det som skiller profesjonell utvikling fra prøving-og-feiling. Med AI som skriver koden for deg er tester enda viktigere – de er det eneste som beviser at koden faktisk gjør det den skal.",
+          "topics": [
+            {
+              "text": "Automatiserte tester med pytest",
+              "note": "Unit-tester og integrasjonstester – la AI skrive dem, men forstå hva de tester"
+            },
+            {
+              "text": "CI/CD med GitHub Actions",
+              "note": "Automatisk testing og deployment ved hver kodeendring"
+            },
+            {
+              "text": "Arkitektur for vedlikeholdbar kode",
+              "note": "Struktur som ikke kollapser under sin egen vekt etter 6 måneder"
+            },
+            {
+              "text": "Overvåkning i produksjon",
+              "note": "Logging, alerting – vet du at appen fungerer kl. 03:00?"
+            }
+          ],
+          "resources": [
+            {
+              "tag": "Gratis",
+              "tagType": "free",
+              "title": "pytest – offisiell dokumentasjon",
+              "url": "https://docs.pytest.org/en/stable/",
+              "note": "docs.pytest.org – standard testverktøy for Python"
+            },
+            {
+              "tag": "Gratis",
+              "tagType": "free",
+              "title": "GitHub Actions – Quickstart",
+              "url": "https://docs.github.com/en/actions/quickstart",
+              "note": "docs.github.com – automatiser test og deployment"
+            }
+          ],
+          "exercises": []
+        },
+        {
+          "number": 4,
+          "title": "Forretning og profesjonell leveranse",
+          "subtitle": "Kontrakter, prissetting og kundehåndtering",
+          "duration": "Løpende",
+          "isNew": false,
+          "goal": "Teknisk dyktighet er nødvendig men ikke tilstrekkelig. Profesjonell programvareleveranse krever at du vet hva du juridisk er ansvarlig for, at du priser arbeidet riktig, og at du setter forventninger som kan innfris.",
+          "topics": [
+            {
+              "text": "Kontrakter og juridisk ansvar",
+              "note": "Hva er du ansvarlig for som softwareleverandør? SLA, garantier, IP."
+            },
+            {
+              "text": "Prissetting – time, fastpris eller abonnement",
+              "note": "Hva passer til hva slags prosjekt og fase"
+            },
+            {
+              "text": "Kravspesifikasjon og endringshåndtering",
+              "note": "Sett forventninger skriftlig – alltid. Scope creep er den vanligste fellen."
+            }
+          ],
+          "resources": [],
+          "exercises": [],
+          "milestone": "Du leverer software med automatiserte tester og overvåkning. Du har et system for kravspesifikasjon og endringshåndtering. Du har rutiner for prissetting og kontraktshåndtering. Du er trygg på å ta betalt for arbeidet ditt."
+        }
+      ]
+    },
+    {
+      "id": "fase4",
+      "number": 4,
+      "colorClass": "p4",
+      "eyebrow": "Fase 4",
+      "title": "Skala og spesialisering",
+      "duration": "Løpende",
+      "goal": "Bygge en bedrift som vokser uten at alt avhenger av deg personlig. Fra å selge timer til å selge produkter. Fra generalist til spesialist med en klar og vanskelig-å-kopiere kombinasjon av domenekunnskap og AI-kompetanse.",
+      "modules": [
+        {
+          "number": 1,
+          "title": "Velg spesialiseringsretning",
+          "subtitle": "Fra generalist til ekspert med klar posisjonering",
+          "duration": null,
+          "isNew": false,
+          "goal": "Velge én primær retning og bli kjent for det. Markedet belønner spesialister sterkere enn generalister – særlig i AI-feltet der kompetansen er knapp.",
+          "topics": [],
+          "resources": [],
+          "exercises": [],
+          "specializations": [
+            {
+              "title": "AI Product Engineer",
+              "note": "LLM-apper, brukeropplevelse, deployment og produkttenkning. Best for produkt- og startup-roller. Fokus: bygg komplette produkter folk faktisk bruker."
+            },
+            {
+              "title": "Applied ML / LLM Engineer",
+              "note": "Fine-tuning, open source-modeller, inferensoptimering, treningspipelines. Best for teknisk dybde og forskningstunge roller."
+            },
+            {
+              "title": "AI Automation Engineer",
+              "note": "Workflow-automatisering, CRM-integrasjoner, forretningsprosesser, multi-tool-systemer. Best for B2B-tjenester og konsulentvirksomhet."
+            }
+          ],
+          "specializationRec": "Gitt at du har både B2B- og B2C-produktideer og ønsker å bygge en bedrift fremfor å bli ren teknisk spesialist, peker kombinasjonen av AI Product Engineer + elementer av Automation Engineer seg ut. Din eksisterende domenekunnskap (finans, trening og annet) er differensiatoren som er vanskelig å kopiere."
+        },
+        {
+          "number": 2,
+          "title": "Fra konsulent til produktselskap",
+          "subtitle": "Skalering uten tilsvarende mer arbeid",
+          "duration": null,
+          "isNew": false,
+          "goal": "Flytte fra å selge tid til å selge produkter. Abonnementsmodeller gir forutsigbar inntekt som skalerer. Systemer og dokumentasjon gjør bedriften robust selv om du er borte.",
+          "topics": [
+            {
+              "text": "Bygg systemer som ikke avhenger av deg",
+              "note": "Dokumentasjon, rutiner, eventuelt samarbeid med andre"
+            },
+            {
+              "text": "Abonnementsmodeller og recurring revenue",
+              "note": "Månedlig inntekt som skalerer uten at du jobber tilsvarende mer"
+            },
+            {
+              "text": "Domenekunnskap som varig differensiator",
+              "note": "Din kombinasjon av bransjeforståelse + AI er vanskelig å kopiere"
+            },
+            {
+              "text": "Bygg og ship minst ett prosjekt per måned",
+              "note": "Offentlig koding akselererer læring og skaper muligheter"
+            }
+          ],
+          "resources": [],
+          "exercises": [
+            {
+              "title": "Kode og ship offentlig",
+              "desc": "Del hva du bygger og hva du lærer. Det akselererer læringen, bygger et nettverk og skaper muligheter du ikke forventer. GitHub, LinkedIn eller en enkel blogg."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
