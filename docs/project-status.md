@@ -1,10 +1,10 @@
 # Project status – Verktøykasse
 
-_v1.4 – 2026-04-17_
+_v1.5 – 2026-04-17_
 
 ## Nåværende fase
 
-Fase 6 – Portere verktøyene inn ✅ Fullført
+Deployed ✅
 
 ## Faseliste
 
@@ -16,17 +16,26 @@ Fase 6 – Portere verktøyene inn ✅ Fullført
 | 4 | Frontend og backend oppsett | ✅ Fullført |
 | 5 | Hello world og verifisering | ✅ Fullført |
 | 6 | Portere verktøyene inn | ✅ Fullført |
+| 7 | Deploy | ✅ Fullført |
 
-## Fullførte verktøy
+## Deploy
 
-- **md-to-docx** – Markdown til Word-konvertering via filopplasting
-- **Læringsplan** – Interaktiv læringsplan portert fra HTML+JSON til React
-- **RFLP Viewer** – Read-only visning av RFLP-databaser fra Excel (.xlsx/.xlsm)
+- **Platform:** Vercel (Hobby-plan, gratis)
+- **Repo:** RATRSolutions/ratr-toolbox (GitHub)
+- **Auto-deploy:** Nye endringer på `main` deployes automatisk
+
+## Aktive verktøy
+
+- **RFLP Viewer** – Live på Vercel. Read-only visning av RFLP-databaser fra Excel (.xlsx/.xlsm)
+
+## Lokalt (ikke deployed)
+
+- **md-to-docx** – Krever Python/pandoc-backend
+- **Læringsplan** – Kan deployes ved behov
 
 ## Neste steg
 
-Ingen definerte faser gjenstår. Mulige retninger:
+Ingen definerte oppgaver. Mulige retninger:
 
-- Forbedringer og bugfixes på eksisterende verktøy
-- Nye verktøy i verktøykassen
-- Deploy / hosting
+- Forbedringer av RFLP Viewer basert på bruk i kundemøter
+- Deploy av Læringsplan
