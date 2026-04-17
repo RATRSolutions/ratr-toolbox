@@ -1,0 +1,62 @@
+.home {
+  min-height: 100vh;
+  background: #1a1a1a;
+  color: #f5f3f0;
+  font-family: 'Source Sans 3', Calibri, sans-serif;
+  padding: 64px 64px 96px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.home-eyebrow {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #c97a1a;
+  margin-bottom: 12px;
+}
+
+.home h1 {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 700;
+  color: #f5f3f0;
+  margin-bottom: 48px;
+}
+
+.home-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+}
+
+.tool-card {
+  background: #242424;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 10px;
+  padding: 24px;
+  text-decoration: none;
+  color: #f5f3f0;
+  transition: border-color 0.15s, background 0.15s;
+  display: block;
+}
+
+.tool-card:hover {
+  background: #2c2c2c;
+  border-color: #c97a1a;
+}
+
+.tool-card h2 {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 1.2rem;
+  font-weight: 400;
+  margin-bottom: 8px;
+  color: #f5f3f0;
+}
+
+.tool-card p {
+  font-size: 14px;
+  color: #8a8a8a;
+  line-height: 1.5;
+}
