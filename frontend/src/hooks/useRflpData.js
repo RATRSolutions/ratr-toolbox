@@ -28,7 +28,9 @@ function parseSheet(sheet) {
     .map((row) => {
       const obj = {};
       headers.forEach((header, i) => {
-        if (header) obj[header] = row[i] ?? null;
+        let val = row[i] ?? null;
+        if (val instanceof Date) val = val.toLocaleDateString('nb-NO');
+        if (header) obj[header] = val;
       });
       return obj;
     });
@@ -72,7 +74,7 @@ export function useRflpData(file) {
       if (cancelled) return;
 
       try {
-        const workbook = XLSX.read(e.target.result, { type: 'array' });
+        const workbook = XLSX.read(e.target.result, { type: 'array', cellDates: true });
 
         if (!workbook.SheetNames.includes('10_Function')) {
           setError('Fant ikke fanen "10_Function" i Excel-filen.');
