@@ -35,6 +35,8 @@ export function useRflpData(file) {
   useEffect(() => {
     if (!file) return;
 
+    let cancelled = false;
+
     setLoading(true);
     setError(null);
     setFunctions([]);
@@ -43,12 +45,13 @@ export function useRflpData(file) {
     const reader = new FileReader();
 
     reader.onload = (e) => {
+      if (cancelled) return;
+
       try {
         const workbook = XLSX.read(e.target.result, { type: 'array' });
 
         if (!workbook.SheetNames.includes('10_Function')) {
           setError('Fant ikke fanen "10_Function" i Excel-filen.');
-          setLoading(false);
           return;
         }
 
@@ -92,9 +95,9 @@ export function useRflpData(file) {
           if (!fkKey) return;
 
           const sectionName = cleanSectionName(sheetName);
-          parsedSections[sectionName] = rows.map((row) => ({
-            ...row,
-            functionId: String(row[fkKey] ?? ''),
+          parsedSections[sectionName] = rows.map(({ [fkKey]: fk, ...rest }) => ({
+            ...rest,
+            functionId: String(fk ?? ''),
           }));
         });
 
@@ -108,11 +111,17 @@ export function useRflpData(file) {
     };
 
     reader.onerror = () => {
+      if (cancelled) return;
+
       setError('Kunne ikke lese filen.');
       setLoading(false);
     };
 
     reader.readAsArrayBuffer(file);
+
+    return () => {
+      cancelled = true;
+    };
   }, [file]);
 
   return { functions, sections, loading, error };
