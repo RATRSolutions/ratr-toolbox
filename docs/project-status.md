@@ -1,10 +1,10 @@
 # Project status – Verktøykasse
 
-_v1.3 – 2026-04-16_
+_v1.4 – 2026-04-17_
 
 ## Nåværende fase
 
-Fase 6 – Portere verktøyene inn 🔄
+Fase 6 – Portere verktøyene inn ✅ Fullført
 
 ## Faseliste
 
@@ -15,10 +15,18 @@ Fase 6 – Portere verktøyene inn 🔄
 | 3 | Versjonskontroll med Git og GitHub | ✅ Fullført |
 | 4 | Frontend og backend oppsett | ✅ Fullført |
 | 5 | Hello world og verifisering | ✅ Fullført |
-| 6 | Portere verktøyene inn | 🔄 Påbegynt |
+| 6 | Portere verktøyene inn | ✅ Fullført |
+
+## Fullførte verktøy
+
+- **md-to-docx** – Markdown til Word-konvertering via filopplasting
+- **Læringsplan** – Interaktiv læringsplan portert fra HTML+JSON til React
+- **RFLP Viewer** – Read-only visning av RFLP-databaser fra Excel (.xlsx/.xlsm)
 
 ## Neste steg
 
-- Teste md-to-docx med ekte filer
-- Portere Læringsplan (HTML + JSON → React-komponent)
-- Bygge RFLP Viewer fra bunnen
+Ingen definerte faser gjenstår. Mulige retninger:
+
+- Forbedringer og bugfixes på eksisterende verktøy
+- Nye verktøy i verktøykassen
+- Deploy / hosting
