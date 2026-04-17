@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 function TreeNode({ node, selectedId, onSelect, depth }) {
   const [expanded, setExpanded] = useState(depth < 2);
-  const hasChildren = node.children.length > 0;
+  const hasChildren = Array.isArray(node.children) && node.children.length > 0;
 
   return (
     <div className="tree-node-wrapper">
@@ -18,7 +18,7 @@ function TreeNode({ node, selectedId, onSelect, depth }) {
         >
           {expanded ? '▼' : '▶'}
         </button>
-        <button className="tree-label" onClick={() => onSelect(node.id)}>
+        <button className="tree-label" onClick={() => onSelect?.(node.id)}>
           {node.name || node.id}
         </button>
       </div>
@@ -39,7 +39,7 @@ function TreeNode({ node, selectedId, onSelect, depth }) {
   );
 }
 
-function FunctionTree({ functions, selectedId, onSelect, fileName }) {
+function FunctionTree({ functions = [], selectedId, onSelect, fileName }) {
   return (
     <div className="function-tree">
       <div className="tree-header">
