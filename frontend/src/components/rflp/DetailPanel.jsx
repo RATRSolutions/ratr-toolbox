@@ -8,13 +8,76 @@ function findCol(row, normalizedName) {
   return Object.keys(row).find((k) => nk(k) === normalizedName) ?? null;
 }
 
-function FieldList({ row, excludeKeys = [] }) {
+function findVal(row, normalizedName) {
+  const col = findCol(row, normalizedName);
+  return col ? row[col] : null;
+}
+
+const EXCLUDED_META = new Set([
+  'functionpath', 'owner', 'effectivefrom', 'effectiveto', 'iscurrent',
+]);
+
+function MetadataBlock({ metadata }) {
+  if (!metadata || Object.keys(metadata).length === 0) return null;
+
+  const intentKey = Object.keys(metadata).find((k) => nk(k) === 'functionalintent');
+  const intentValue = intentKey ? metadata[intentKey] : null;
+
+  const chips = Object.entries(metadata).filter(([k]) => {
+    const norm = nk(k);
+    return norm !== 'functionalintent' && !EXCLUDED_META.has(norm);
+  });
+
+  if (!intentValue && chips.length === 0) return null;
+
+  return (
+    <div className="detail-metadata-block">
+      {intentValue && <div className="functional-intent">{intentValue}</div>}
+      {chips.length > 0 && (
+        <div className="meta-chips">
+          {chips.map(([key, val]) => (
+            <span key={key} className="meta-chip">
+              <span className="meta-chip-key">{key}:</span>
+              {String(val ?? '')}
+            </span>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function SubfunctionsBlock({ children, onSelect }) {
+  const [open, setOpen] = useState(false);
+  if (!children || children.length === 0) return null;
+
+  return (
+    <div className="detail-section">
+      <button className="section-toggle" onClick={() => setOpen((o) => !o)}>
+        <span className="section-title">Underfunksjoner ({children.length})</span>
+        <span className={`chevron${open ? ' open' : ''}`}>›</span>
+      </button>
+      {open && (
+        <div className="section-body">
+          {children.map((child) => (
+            <button key={child.id} className="subfunction-item" onClick={() => onSelect?.(child.id)}>
+              <span className="node-id-tag">{child.id}</span>
+              <span>{child.name || child.id}</span>
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function SubItemFields({ row, excludeKeys = [] }) {
   const excluded = new Set(excludeKeys.map(nk));
   const entries = Object.entries(row).filter(([k]) => !excluded.has(nk(k)));
   return (
-    <div className="detail-metadata" style={{ marginBottom: 0 }}>
+    <div className="cd-sub-item-fields">
       {entries.map(([key, val]) => (
-        <div key={key} className="meta-row">
+        <div key={key} className="row-field">
           <span className="field-label">{key}</span>
           <span className="field-value">{String(val ?? '')}</span>
         </div>
@@ -23,7 +86,7 @@ function FieldList({ row, excludeKeys = [] }) {
   );
 }
 
-function ConceptDecisionsSection({ funcId, sections, linkedSheets }) {
+function ConceptDecisionsBlock({ funcId, sections, linkedSheets }) {
   const [open, setOpen] = useState(false);
 
   const allocRows = sections['FunctionConceptAllocation'] ?? [];
@@ -51,12 +114,10 @@ function ConceptDecisionsSection({ funcId, sections, linkedSheets }) {
 
   if (matchingCDs.length === 0) return null;
 
-  const count = matchingCDs.length;
-
   return (
     <div className="detail-section">
       <button className="section-toggle" onClick={() => setOpen((o) => !o)}>
-        <span className="section-title">ConceptDecisions ({count})</span>
+        <span className="section-title">Konseptbeslutninger ({matchingCDs.length})</span>
         <span className={`chevron${open ? ' open' : ''}`}>›</span>
       </button>
       {open && (
@@ -64,51 +125,79 @@ function ConceptDecisionsSection({ funcId, sections, linkedSheets }) {
           {matchingCDs.map((cd, i) => {
             const cdIdCol = findCol(cd, 'conceptdecisionid') ?? findCol(cd, 'id');
             const cdId = cdIdCol ? String(cd[cdIdCol] ?? '') : String(i);
+            const cdName = findVal(cd, 'name') ?? findVal(cd, 'conceptdecisionname') ?? cdId;
+            const cdDesc = findVal(cd, 'description') ?? findVal(cd, 'descriptiontext') ?? null;
+
+            const otherFields = Object.entries(cd).filter(([k]) => {
+              const norm = nk(k);
+              return !['conceptdecisionid', 'id', 'name', 'conceptdecisionname',
+                        'description', 'descriptiontext'].includes(norm);
+            });
 
             const matchingLEs = leRows.filter((le) => {
-              const leIdFk = findCol(le, 'conceptdecisionid');
-              return leIdFk && String(le[leIdFk] ?? '') === cdId;
+              const fk = findCol(le, 'conceptdecisionid');
+              return fk && String(le[fk] ?? '') === cdId;
             });
 
             return (
-              <div key={cdId || i} className="section-row" style={{ gap: 0 }}>
-                <FieldList row={cd} />
+              <div key={cdId || i} className="cd-entry">
+                <div className="cd-name">{cdName}</div>
+                {cdDesc && <div className="cd-description">{cdDesc}</div>}
+                {otherFields.length > 0 && (
+                  <div className="meta-chips" style={{ marginBottom: 10 }}>
+                    {otherFields.map(([key, val]) => (
+                      <span key={key} className="meta-chip">
+                        <span className="meta-chip-key">{key}:</span>
+                        {String(val ?? '')}
+                      </span>
+                    ))}
+                  </div>
+                )}
                 {matchingLEs.length > 0 && (
-                  <div style={{ marginTop: 8 }}>
-                    <div className="cd-sublabel">Logiske Elementer</div>
-                    {matchingLEs.map((le, j) => {
-                      const leIdCol =
-                        findCol(le, 'logicalelementid') ??
-                        findCol(le, 'logicalid') ??
-                        findCol(le, 'id');
-                      const leId = leIdCol ? String(le[leIdCol] ?? '') : String(j);
+                  <div className="cd-sub-section">
+                    <div className="cd-sublabel">Logiske Elementer ({matchingLEs.length})</div>
+                    <div className="cd-sub-items">
+                      {matchingLEs.map((le, j) => {
+                        const leIdCol =
+                          findCol(le, 'logicalelementid') ??
+                          findCol(le, 'logicalid') ??
+                          findCol(le, 'id');
+                        const leId = leIdCol ? String(le[leIdCol] ?? '') : String(j);
 
-                      const matchingPEs = peRows.filter((pe) => {
-                        const peFk = findCol(pe, 'logicalelementid') ?? findCol(pe, 'logicalid');
-                        return peFk && String(pe[peFk] ?? '') === leId;
-                      });
+                        const matchingPEs = peRows.filter((pe) => {
+                          const peFk =
+                            findCol(pe, 'logicalelementid') ?? findCol(pe, 'logicalid');
+                          return peFk && String(pe[peFk] ?? '') === leId;
+                        });
 
-                      return (
-                        <div key={leId || j} style={{ marginBottom: 8 }}>
-                          <FieldList row={le} excludeKeys={['conceptdecisionid']} />
-                          {matchingPEs.length > 0 && (
-                            <div style={{ marginTop: 6 }}>
-                              <div className="cd-sublabel">Fysiske Elementer</div>
-                              {matchingPEs.map((pe, m) => {
-                                const peKey = Object.values(pe).join('|') || String(m);
-                                return (
-                                  <FieldList
-                                    key={peKey}
-                                    row={pe}
-                                    excludeKeys={['logicalelementid', 'logicalid']}
-                                  />
-                                );
-                              })}
-                            </div>
-                          )}
-                        </div>
-                      );
-                    })}
+                        return (
+                          <div key={leId || j} className="cd-sub-item">
+                            <SubItemFields row={le} excludeKeys={['conceptdecisionid']} />
+                            {matchingPEs.length > 0 && (
+                              <div className="cd-sub-section" style={{ marginTop: 8 }}>
+                                <div className="cd-sublabel">
+                                  Fysiske Elementer ({matchingPEs.length})
+                                </div>
+                                <div className="cd-sub-items">
+                                  {matchingPEs.map((pe, m) => (
+                                    <div
+                                      key={Object.values(pe).join('|') || m}
+                                      className="cd-sub-item"
+                                      style={{ background: '#2a2a2a' }}
+                                    >
+                                      <SubItemFields
+                                        row={pe}
+                                        excludeKeys={['logicalelementid', 'logicalid']}
+                                      />
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
                   </div>
                 )}
               </div>
@@ -139,7 +228,7 @@ function SectionBlock({ title, rows }) {
             return (
               <div key={stableKey} className="section-row">
                 {Object.entries(row)
-                  .filter(([key]) => key !== 'functionId' && key.toLowerCase() !== 'functionid')
+                  .filter(([key]) => key !== 'functionId' && nk(key) !== 'functionid')
                   .map(([key, val]) => (
                     <div key={key} className="row-field">
                       <span className="field-label">{key}</span>
@@ -155,9 +244,9 @@ function SectionBlock({ title, rows }) {
   );
 }
 
-const HIDDEN_SECTIONS = new Set(['functionconceptallocation']);
+const SKIP_SECTIONS = new Set(['functionconceptallocation', 'requirements', 'contextdescription']);
 
-function DetailPanel({ func, sections = {}, linkedSheets = {} }) {
+function DetailPanel({ func, sections = {}, linkedSheets = {}, onSelect }) {
   if (!func) {
     return (
       <div className="detail-panel detail-empty">
@@ -166,12 +255,12 @@ function DetailPanel({ func, sections = {}, linkedSheets = {} }) {
     );
   }
 
-  const relatedSections = Object.entries(sections)
-    .filter(([title]) => !HIDDEN_SECTIONS.has(title.toLowerCase().replace(/\s+/g, '')))
-    .map(([title, rows]) => ({
-      title,
-      rows: rows.filter((r) => r.functionId === func.id),
-    }))
+  const reqRows = (sections['Requirements'] ?? []).filter((r) => r.functionId === func.id);
+  const ctxRows = (sections['ContextDescription'] ?? []).filter((r) => r.functionId === func.id);
+
+  const otherSections = Object.entries(sections)
+    .filter(([title]) => !SKIP_SECTIONS.has(nk(title)))
+    .map(([title, rows]) => ({ title, rows: rows.filter((r) => r.functionId === func.id) }))
     .filter(({ rows }) => rows.length > 0);
 
   return (
@@ -181,30 +270,16 @@ function DetailPanel({ func, sections = {}, linkedSheets = {} }) {
         <h2 className="detail-name">{func.name}</h2>
       </div>
 
-      {func.metadata && Object.keys(func.metadata).length > 0 && (
-        <div className="detail-metadata">
-          {Object.entries(func.metadata).map(([key, val]) => (
-            <div key={key} className="meta-row">
-              <span className="field-label">{key}</span>
-              <span className="field-value">{String(val ?? '')}</span>
-            </div>
-          ))}
-        </div>
-      )}
+      <MetadataBlock metadata={func.metadata} />
 
       <div className="detail-sections">
-        <ConceptDecisionsSection
-          funcId={func.id}
-          sections={sections}
-          linkedSheets={linkedSheets}
-        />
-        {relatedSections.map(({ title, rows }) => (
+        <SubfunctionsBlock children={func.children} onSelect={onSelect} />
+        <ConceptDecisionsBlock funcId={func.id} sections={sections} linkedSheets={linkedSheets} />
+        {reqRows.length > 0 && <SectionBlock title="Krav" rows={reqRows} />}
+        {ctxRows.length > 0 && <SectionBlock title="Kontekstbeskrivelser" rows={ctxRows} />}
+        {otherSections.map(({ title, rows }) => (
           <SectionBlock key={title} title={title} rows={rows} />
         ))}
-        {relatedSections.length === 0 &&
-          !sections['FunctionConceptAllocation']?.some((r) => r.functionId === func.id) && (
-            <p className="no-data">Ingen tilknyttede data for denne funksjonen.</p>
-          )}
       </div>
     </div>
   );

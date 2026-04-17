@@ -56,7 +56,7 @@ function RflpViewer() {
         />
       </div>
       <div className="rflp-detail-panel">
-        <DetailPanel func={selectedFunc} sections={sections} linkedSheets={linkedSheets} />
+        <DetailPanel func={selectedFunc} sections={sections} linkedSheets={linkedSheets} onSelect={setSelectedId} />
       </div>
     </div>
   );

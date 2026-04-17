@@ -52,7 +52,8 @@ function TreeNode({ node, selectedId, onSelect, depth, statusFilter }) {
           {isExpanded ? '▼' : '▶'}
         </button>
         <button className="tree-label" onClick={() => onSelect?.(node.id)}>
-          {node.name || node.id}
+          <span className="node-id-tag">{node.id}</span>
+          <span>{node.name || node.id}</span>
         </button>
       </div>
       {isExpanded && hasChildren && (
