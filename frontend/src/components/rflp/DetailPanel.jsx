@@ -469,17 +469,15 @@ function DetailPanel({ func, sections = {}, linkedSheets = {}, onSelect }) {
     }, 60);
   }, []);
 
-  if (!func) {
-    return (
-      <div className="detail-panel detail-empty">
-        <p>Velg en funksjon i treet til venstre.</p>
-      </div>
-    );
-  }
-
-  const reqRows = (sections['Requirements'] ?? []).filter((r) => r.functionId === func.id);
-  const ctxRows = (sections['ContextDescription'] ?? []).filter((r) => r.functionId === func.id);
-
+  // All hooks must be called before any conditional return
+  const reqRows = useMemo(
+    () => func ? (sections['Requirements'] ?? []).filter((r) => r.functionId === func.id) : [],
+    [func, sections]
+  );
+  const ctxRows = useMemo(
+    () => func ? (sections['ContextDescription'] ?? []).filter((r) => r.functionId === func.id) : [],
+    [func, sections]
+  );
   const ctxToReqIds = useMemo(() => {
     const map = {};
     reqRows.forEach((req) => {
@@ -493,6 +491,14 @@ function DetailPanel({ func, sections = {}, linkedSheets = {}, onSelect }) {
     });
     return map;
   }, [reqRows]);
+
+  if (!func) {
+    return (
+      <div className="detail-panel detail-empty">
+        <p>Velg en funksjon i treet til venstre.</p>
+      </div>
+    );
+  }
 
   const otherSections = Object.entries(sections)
     .filter(([title]) => !SKIP_SECTIONS.has(nk(title)))
