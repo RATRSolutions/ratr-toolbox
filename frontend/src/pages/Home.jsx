@@ -14,6 +14,12 @@ const tools = [
     description: 'Veikart for AI-assistert softwareutvikling.',
     path: '/laeringsplan',
   },
+  {
+    id: 'rflp-viewer',
+    title: 'RFLP Viewer',
+    description: 'Naviger og presenter RFLP-databaser fra Excel.',
+    path: '/rflp-viewer',
+  },
 ];
 
 function Home() {
