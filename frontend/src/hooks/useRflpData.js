@@ -5,9 +5,33 @@ function cleanSectionName(sheetName) {
   return sheetName.replace(/^\d+_/, '').replace(/_/g, ' ');
 }
 
+function normalizeKey(k) {
+  return k.toLowerCase().replace(/\s+/g, '');
+}
+
 function getFunctionIdKey(rows) {
   if (!rows.length) return null;
-  return Object.keys(rows[0]).find((k) => k.toLowerCase() === 'functionid') || null;
+  return Object.keys(rows[0]).find((k) => normalizeKey(k) === 'functionid') || null;
+}
+
+// Read sheet as raw arrays, find the header row with FunctionID, build objects manually
+function parseSheet(sheet) {
+  const raw = XLSX.utils.sheet_to_json(sheet, { header: 1, defval: '' });
+  const headerIdx = raw.findIndex((row) =>
+    row.some((cell) => typeof cell === 'string' && normalizeKey(cell) === 'functionid')
+  );
+  if (headerIdx === -1) return [];
+  const headers = raw[headerIdx];
+  return raw
+    .slice(headerIdx + 1)
+    .filter((row) => row.some((cell) => cell !== '' && cell != null))
+    .map((row) => {
+      const obj = {};
+      headers.forEach((header, i) => {
+        if (header) obj[header] = row[i] ?? null;
+      });
+      return obj;
+    });
 }
 
 function buildTree(rows) {
@@ -55,15 +79,15 @@ export function useRflpData(file) {
           return;
         }
 
-        // Parse function sheet
-        const funcRows = XLSX.utils.sheet_to_json(workbook.Sheets['10_Function']);
+        // Parse function sheet — auto-detect header row
+        const funcRows = parseSheet(workbook.Sheets['10_Function']);
         const funcIdKey = getFunctionIdKey(funcRows);
         const parentIdKey = funcRows.length
-          ? Object.keys(funcRows[0]).find((k) => k.toLowerCase() === 'parentid') || null
+          ? Object.keys(funcRows[0]).find((k) => normalizeKey(k) === 'parentid') || null
           : null;
         const nameKey = funcRows.length
           ? Object.keys(funcRows[0]).find((k) =>
-              ['functionname', 'name', 'description', 'title'].includes(k.toLowerCase())
+              ['functionname', 'name', 'description', 'title'].includes(normalizeKey(k))
             ) || null
           : null;
 
@@ -81,14 +105,14 @@ export function useRflpData(file) {
 
         const parsedFunctions = buildTree(rawFunctions);
 
-        // Parse related sheets
+        // Parse related sheets — auto-detect header row per sheet
         const parsedSections = {};
         workbook.SheetNames.forEach((sheetName) => {
           if (sheetName === '10_Function') return;
           const sheet = workbook.Sheets[sheetName];
           if (!sheet || !sheet['!ref']) return;
 
-          const rows = XLSX.utils.sheet_to_json(sheet);
+          const rows = parseSheet(sheet);
           if (!rows.length) return;
 
           const fkKey = getFunctionIdKey(rows);

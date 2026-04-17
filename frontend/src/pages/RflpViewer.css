@@ -78,6 +78,7 @@
   height: 100vh;
   background: #1a1a1a;
   color: #f5f3f0;
+  color-scheme: dark;
   font-family: 'Source Sans 3', Calibri, sans-serif;
   overflow: hidden;
 }
@@ -195,6 +196,7 @@
 }
 
 .tree-expand {
+  appearance: none;
   background: none;
   border: none;
   color: #5e5c57;
@@ -207,6 +209,7 @@
 }
 
 .tree-label {
+  appearance: none;
   background: none;
   border: none;
   color: #c8c5bf;
