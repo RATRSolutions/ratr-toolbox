@@ -11,8 +11,13 @@ function SectionBlock({ title, rows }) {
       </button>
       {open && (
         <div className="section-body">
-          {rows.map((row, i) => (
-            <div key={i} className="section-row">
+          {rows.map((row, i) => {
+            const stableKey = Object.entries(row)
+              .filter(([k]) => k !== 'functionId')
+              .map(([, v]) => String(v ?? ''))
+              .join('|') || String(i);
+            return (
+            <div key={stableKey} className="section-row">
               {Object.entries(row)
                 .filter(([key]) => key !== 'functionId' && key.toLowerCase() !== 'functionid')
                 .map(([key, val]) => (
@@ -22,14 +27,15 @@ function SectionBlock({ title, rows }) {
                   </div>
                 ))}
             </div>
-          ))}
+            );
+          })}
         </div>
       )}
     </div>
   );
 }
 
-function DetailPanel({ func, sections }) {
+function DetailPanel({ func, sections = {} }) {
   if (!func) {
     return (
       <div className="detail-panel detail-empty">
@@ -52,7 +58,7 @@ function DetailPanel({ func, sections }) {
         <h2 className="detail-name">{func.name}</h2>
       </div>
 
-      {Object.keys(func.metadata).length > 0 && (
+      {func.metadata && Object.keys(func.metadata).length > 0 && (
         <div className="detail-metadata">
           {Object.entries(func.metadata).map(([key, val]) => (
             <div key={key} className="meta-row">
