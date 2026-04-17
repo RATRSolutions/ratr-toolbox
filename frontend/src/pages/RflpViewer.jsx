@@ -6,6 +6,7 @@ import DetailPanel from '../components/rflp/DetailPanel';
 import './RflpViewer.css';
 
 function findFunction(nodes, id) {
+  if (!nodes) return null;
   for (const node of nodes) {
     if (node.id === id) return node;
     const found = findFunction(node.children, id);
