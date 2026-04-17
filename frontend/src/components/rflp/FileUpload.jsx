@@ -5,6 +5,7 @@ function FileUpload({ onLoad }) {
   const [formatError, setFormatError] = useState(null);
 
   function handleFile(file) {
+    if (inputRef.current) inputRef.current.value = '';
     if (!file) return;
     if (!file.name.match(/\.(xlsx|xlsm)$/i)) {
       setFormatError('Kun .xlsx og .xlsm støttes.');
