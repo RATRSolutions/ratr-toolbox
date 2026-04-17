@@ -29,3 +29,6 @@ Thumbs.db
 
 # Brainstorming mockups
 .superpowers/
+
+# Internal documentation (not relevant for the app, kept local only)
+docs/
