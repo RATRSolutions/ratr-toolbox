@@ -16,7 +16,10 @@ function getFunctionIdKey(rows) {
 
 function parseSheetGeneric(sheet) {
   const raw = XLSX.utils.sheet_to_json(sheet, { header: 1, defval: '' });
-  const headerIdx = raw.findIndex((row) => row.some((cell) => cell !== '' && cell != null));
+  // Skip single-cell title rows; find the first row with 2+ non-empty cells
+  const headerIdx = raw.findIndex(
+    (row) => row.filter((cell) => cell !== '' && cell != null).length >= 2
+  );
   if (headerIdx === -1) return [];
   const headers = raw[headerIdx];
   return raw

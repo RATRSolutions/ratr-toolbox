@@ -431,6 +431,15 @@
 }
 
 /* ── Metadata-blokk (kompakt) ──────────────────── */
+.meta-section-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #5e5c57;
+  margin-bottom: 6px;
+}
+
 .detail-metadata-block {
   margin-bottom: 24px;
 }
@@ -551,4 +560,10 @@
 
 .cd-sub-item-fields .field-value {
   font-size: 12px;
+}
+
+.compact-main-text {
+  font-size: 13px;
+  color: #c8c5bf;
+  line-height: 1.6;
 }
