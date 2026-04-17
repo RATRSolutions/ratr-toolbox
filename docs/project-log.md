@@ -23,3 +23,4 @@ Denne filen trenger ikke leses i vanlige arbeidssesjoner.
 | 2026-04-16 | Fase 4 fullført – React + Vite (frontend) og Node.js + Express (backend) satt opp |
 | 2026-04-16 | Fase 5 fullført – hello world verifisert, frontend og backend kommuniserer |
 | 2026-04-16 | Fase 6 påbegynt – md-to-docx portert: Python-skript kalt fra Express, filopplasting via multer, nedlasting i nettleser |
+| 2026-04-17 | RFLP Viewer betydelig forbedret: full bredde, linjeskift i funksjonstreet, ID-tag per node, statusfilter med auto-ekspandering, treet starter kollapset, detaljpanel redesignet med FunctionalIntent fremhevet, underfunksjoner som klikkbar liste, ConseptBeslutninger med hierarkisk LogiskElement → FysiskElement, Krav og Kontekstbeskrivelser komprimert med fokusfelter og chips, filter på SourceType i Krav, kryssnavigasjon mellom Krav ↔ Kontekst ↔ Konsept med scroll og highlight-animasjon |

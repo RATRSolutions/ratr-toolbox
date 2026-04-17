@@ -27,7 +27,15 @@ Deployed ✅
 
 ## Aktive verktøy
 
-- **RFLP Viewer** – Live på Vercel. Read-only visning av RFLP-databaser fra Excel (.xlsx/.xlsm)
+- **RFLP Viewer** – Live på Vercel. Read-only visning av RFLP-databaser fra Excel (.xlsx/.xlsm).
+  Funksjoner per 2026-04-17:
+  - Funksjonshierarki med ID-tag, statusfilter og kollapset startvisning
+  - Detaljpanel med FunctionalIntent fremhevet, metadata som chips
+  - Underfunksjoner som klikkbar liste (navigerer i treet)
+  - Konseptbeslutninger med nestet LogiskElement → FysiskElement
+  - Kontekstbeskrivelser og Krav komprimert med fokusfelter
+  - Filter på SourceType i Krav-blokken
+  - Kryssnavigasjon mellom Krav ↔ Kontekst ↔ Konsept med scroll og highlight
 
 ## Lokalt (ikke deployed)
 
@@ -38,5 +46,5 @@ Deployed ✅
 
 Ingen definerte oppgaver. Mulige retninger:
 
-- Forbedringer av RFLP Viewer basert på bruk i kundemøter
+- Ytterligere RFLP Viewer-forbedringer basert på bruk i kundemøter
 - Deploy av Læringsplan
