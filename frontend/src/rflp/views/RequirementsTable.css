@@ -1,0 +1,238 @@
+/* ── Layout ─────────────────────────────────────── */
+.req-view {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* ── Toolbar ────────────────────────────────────── */
+.req-toolbar {
+  flex-shrink: 0;
+  background: #141414;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  padding: 12px 20px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.req-search {
+  width: 100%;
+  max-width: 420px;
+  background: #1e1e1e;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  color: #f5f3f0;
+  font-family: 'Source Sans 3', Calibri, sans-serif;
+  font-size: 13px;
+  padding: 7px 12px;
+  outline: none;
+  transition: border-color 0.15s;
+  box-sizing: border-box;
+}
+
+.req-search::placeholder {
+  color: #5e5c57;
+}
+
+.req-search:focus {
+  border-color: rgba(201, 122, 26, 0.5);
+}
+
+/* ── Filter row ─────────────────────────────────── */
+.req-filter-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.req-filter-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.req-filter-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #5e5c57;
+  flex-shrink: 0;
+}
+
+.req-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.req-chip {
+  appearance: none;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #8a8a8a;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  padding: 3px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s, background 0.15s;
+}
+
+.req-chip:hover {
+  border-color: rgba(255, 255, 255, 0.25);
+  color: #c8c5bf;
+}
+
+.req-chip.active {
+  border-color: #c97a1a;
+  color: #c97a1a;
+  background: rgba(201, 122, 26, 0.08);
+}
+
+/* ── Selects ────────────────────────────────────── */
+.req-filter-selects {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-left: auto;
+}
+
+.req-select {
+  appearance: none;
+  background: #1e1e1e url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath fill='%235e5c57' d='M0 0l5 6 5-6z'/%3E%3C/svg%3E") no-repeat right 8px center;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 5px;
+  color: #c8c5bf;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  padding: 5px 24px 5px 9px;
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.req-select:focus {
+  border-color: rgba(201, 122, 26, 0.5);
+}
+
+.req-clear-btn {
+  appearance: none;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 5px;
+  color: #5e5c57;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  padding: 5px 10px;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.req-clear-btn:hover {
+  color: #c8c5bf;
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+/* ── Count ──────────────────────────────────────── */
+.req-count {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: #5e5c57;
+}
+
+/* ── Table wrapper ──────────────────────────────── */
+.req-table-wrapper {
+  flex: 1;
+  overflow: auto;
+}
+
+.req-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 120px;
+  font-size: 14px;
+  color: #5e5c57;
+}
+
+/* ── Table ──────────────────────────────────────── */
+.req-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.req-table thead {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.req-table th {
+  background: #181818;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #5e5c57;
+  font-weight: 400;
+  text-align: left;
+  padding: 10px 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  white-space: nowrap;
+}
+
+.req-table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  color: #c8c5bf;
+  vertical-align: top;
+  line-height: 1.5;
+}
+
+.req-table tbody tr:hover td {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.req-table td.mono {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  color: #8a8a8a;
+  white-space: nowrap;
+}
+
+.req-table td.badge-cell {
+  white-space: nowrap;
+}
+
+/* ── Badge ──────────────────────────────────────── */
+.req-badge {
+  display: inline-block;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  padding: 2px 7px;
+  border-radius: 3px;
+  border: 1px solid;
+  white-space: nowrap;
+}
+
+.req-badge-empty {
+  background: transparent;
+  color: #3a3a3a;
+  border-color: transparent;
+}
+
+.req-empty-cell {
+  color: #3a3a3a;
+}

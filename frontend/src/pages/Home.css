@@ -8,6 +8,13 @@
   margin: 0 auto;
 }
 
+.home-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 48px;
+}
+
 .home-eyebrow {
   font-family: 'DM Mono', monospace;
   font-size: 11px;
@@ -22,7 +29,7 @@
   font-size: clamp(2rem, 5vw, 3rem);
   font-weight: 700;
   color: #f5f3f0;
-  margin-bottom: 48px;
+  margin-bottom: 0;
 }
 
 .home-grid {
@@ -59,4 +66,70 @@
   font-size: 14px;
   color: #8a8a8a;
   line-height: 1.5;
+}
+
+/* ── Hamburgermeny ────────────────────────────────── */
+
+.hamburger-wrapper {
+  position: relative;
+  flex-shrink: 0;
+  margin-top: 4px;
+}
+
+.hamburger-btn {
+  appearance: none;
+  background: none;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 6px;
+  padding: 8px 10px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  transition: border-color 0.15s;
+}
+
+.hamburger-btn span {
+  display: block;
+  width: 18px;
+  height: 2px;
+  background: #8a8a8a;
+  border-radius: 1px;
+  transition: background 0.15s;
+}
+
+.hamburger-btn:hover,
+.hamburger-btn.open {
+  border-color: #c97a1a;
+}
+
+.hamburger-btn:hover span,
+.hamburger-btn.open span {
+  background: #c97a1a;
+}
+
+.hamburger-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  background: #242424;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  min-width: 180px;
+  overflow: hidden;
+  z-index: 100;
+}
+
+.hamburger-item {
+  display: block;
+  padding: 12px 16px;
+  text-decoration: none;
+  font-size: 14px;
+  color: #c8c5bf;
+  transition: background 0.1s, color 0.1s;
+}
+
+.hamburger-item:hover {
+  background: #2c2c2c;
+  color: #f5f3f0;
 }
