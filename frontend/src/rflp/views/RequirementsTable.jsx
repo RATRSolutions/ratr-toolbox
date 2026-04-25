@@ -51,41 +51,47 @@ const COLUMNS = [
   { key: 'status',              label: 'Status',                          },
 ];
 
-export default function RequirementsTable({ model }) {
+export default function RequirementsTable({ model, selectedFunctionId }) {
   const allReqs = useMemo(() => model.getAllRequirements(), [model]);
+  const [includeChildren, setIncludeChildren] = useState(false);
 
-  const sourceTypes  = useMemo(() => unique(allReqs.map((r) => getField(r, 'sourcetype'))),          [allReqs]);
-  const categories   = useMemo(() => unique(allReqs.map((r) => getField(r, 'requirementcategory'))), [allReqs]);
-  const statuses     = useMemo(() => unique(allReqs.map((r) => getField(r, 'status'))),              [allReqs]);
-  const functionIds  = useMemo(() => unique(allReqs.map((r) => getField(r, 'functionid'))),          [allReqs]);
+  const baseReqs = useMemo(() => {
+    if (!selectedFunctionId) return allReqs;
+    if (includeChildren) {
+      const ids = model.getDescendantIds(selectedFunctionId);
+      return allReqs.filter((r) => ids.has(getField(r, 'functionid')));
+    }
+    return allReqs.filter((r) => getField(r, 'functionid') === selectedFunctionId);
+  }, [allReqs, model, selectedFunctionId, includeChildren]);
 
-  const [selSourceTypes, setSelSourceTypes]   = useState(new Set());
-  const [selCategories,  setSelCategories]    = useState(new Set());
-  const [selFunctionId,  setSelFunctionId]    = useState('');
-  const [selStatus,      setSelStatus]        = useState('');
-  const [search,         setSearch]           = useState('');
+  const sourceTypes = useMemo(() => unique(baseReqs.map((r) => getField(r, 'sourcetype'))),          [baseReqs]);
+  const categories  = useMemo(() => unique(baseReqs.map((r) => getField(r, 'requirementcategory'))), [baseReqs]);
+  const statuses    = useMemo(() => unique(baseReqs.map((r) => getField(r, 'status'))),              [baseReqs]);
+
+  const [selSourceTypes, setSelSourceTypes] = useState(new Set());
+  const [selCategories,  setSelCategories]  = useState(new Set());
+  const [selStatus,      setSelStatus]      = useState('');
+  const [search,         setSearch]         = useState('');
 
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
-    return allReqs.filter((req) => {
+    return baseReqs.filter((req) => {
       if (selSourceTypes.size > 0 && !selSourceTypes.has(getField(req, 'sourcetype'))) return false;
       if (selCategories.size  > 0 && !selCategories.has(getField(req, 'requirementcategory'))) return false;
-      if (selFunctionId && getField(req, 'functionid') !== selFunctionId) return false;
-      if (selStatus     && getField(req, 'status')     !== selStatus)     return false;
+      if (selStatus && getField(req, 'status') !== selStatus) return false;
       if (q) {
         const haystack = COLUMNS.map(({ key }) => getField(req, key)).join(' ').toLowerCase();
         if (!haystack.includes(q)) return false;
       }
       return true;
     });
-  }, [allReqs, selSourceTypes, selCategories, selFunctionId, selStatus, search]);
+  }, [baseReqs, selSourceTypes, selCategories, selStatus, search]);
 
-  const hasFilters = selSourceTypes.size > 0 || selCategories.size > 0 || selFunctionId || selStatus || search;
+  const hasFilters = selSourceTypes.size > 0 || selCategories.size > 0 || selStatus || search;
 
   function clearAll() {
     setSelSourceTypes(new Set());
     setSelCategories(new Set());
-    setSelFunctionId('');
     setSelStatus('');
     setSearch('');
   }
@@ -122,6 +128,8 @@ export default function RequirementsTable({ model }) {
             </div>
           </div>
 
+          <div className="req-filter-divider" />
+
           <div className="req-filter-group">
             <span className="req-filter-label">Kategori</span>
             <div className="req-chips">
@@ -137,28 +145,32 @@ export default function RequirementsTable({ model }) {
             </div>
           </div>
 
-          <div className="req-filter-selects">
-            <select
-              className="req-select"
-              value={selFunctionId}
-              onChange={(e) => setSelFunctionId(e.target.value)}
-            >
-              <option value="">Alle funksjoner</option>
-              {functionIds.map((id) => (
-                <option key={id} value={id}>{id}</option>
-              ))}
-            </select>
-
+          <div className="req-filter-right">
+            <span className="req-filter-label">Status</span>
             <select
               className="req-select"
               value={selStatus}
               onChange={(e) => setSelStatus(e.target.value)}
             >
-              <option value="">Alle statuser</option>
+              <option value="">Alle</option>
               {statuses.map((s) => (
                 <option key={s} value={s}>{s}</option>
               ))}
             </select>
+
+            {selectedFunctionId && <div className="req-filter-divider" />}
+
+            {selectedFunctionId && (
+              <label className="req-toggle-label">
+                <input
+                  type="checkbox"
+                  className="req-toggle-checkbox"
+                  checked={includeChildren}
+                  onChange={(e) => setIncludeChildren(e.target.checked)}
+                />
+                Inkluder underfunksjoner
+              </label>
+            )}
 
             {hasFilters && (
               <button className="req-clear-btn" onClick={clearAll}>
@@ -169,7 +181,12 @@ export default function RequirementsTable({ model }) {
         </div>
 
         <div className="req-count">
-          {filtered.length} av {allReqs.length} krav
+          {filtered.length} av {baseReqs.length} krav
+          {selectedFunctionId && (
+            includeChildren
+              ? ` (${selectedFunctionId} og underfunksjoner)`
+              : ` (${selectedFunctionId})`
+          )}
         </div>
       </div>
 

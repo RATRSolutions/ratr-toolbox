@@ -262,6 +262,44 @@ class RflpDataModel {
     return path;
   }
 
+  search(query) {
+    if (!query || !query.trim()) return { functions: [], requirements: [], conceptDecisions: [], contextDescriptions: [] };
+    const q = query.trim().toLowerCase();
+
+    const matchRow = (row) =>
+      Object.values(row).some((v) => v != null && String(v).toLowerCase().includes(q));
+
+    const functions = [];
+    Object.values(this._funcMap).forEach((node) => {
+      if (
+        node.id.toLowerCase().includes(q) ||
+        node.name.toLowerCase().includes(q) ||
+        Object.values(node.metadata).some((v) => v != null && String(v).toLowerCase().includes(q))
+      ) {
+        functions.push({ id: node.id, name: node.name });
+      }
+    });
+
+    const requirements = Object.values(this._reqsByFunc).flat().filter(matchRow);
+
+    const conceptDecisions = Object.values(this._cdsByFunc).flat().filter(matchRow);
+
+    const contextDescriptions = Object.values(this._ctxByFunc).flat().filter(matchRow);
+
+    return { functions, requirements, conceptDecisions, contextDescriptions };
+  }
+
+  getDescendantIds(functionId) {
+    const ids = new Set();
+    const collect = (id) => {
+      ids.add(id);
+      const node = this._funcMap[id];
+      if (node) node.children.forEach((c) => collect(c.id));
+    };
+    collect(functionId);
+    return ids;
+  }
+
   getTraceability(functionId) {
     const reqs = [];
     const visited = new Set();

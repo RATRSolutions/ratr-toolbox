@@ -1,0 +1,444 @@
+/* ── Outermost container (flex column: toolbar + matrix) ── */
+.tm-outer {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* ── Filter toolbar ─────────────────────────────────────── */
+.tm-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  flex-shrink: 0;
+  padding: 8px 16px;
+  background: #141414;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.tm-toolbar-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.35);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+
+.tm-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.tm-chip {
+  font-size: 11px;
+  font-family: 'Source Sans 3', Calibri, sans-serif;
+  padding: 3px 9px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: transparent;
+  color: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  transition: background 0.1s, color 0.1s, border-color 0.1s;
+  white-space: nowrap;
+}
+
+.tm-chip:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.tm-chip-clear {
+  font-size: 11px;
+  font-family: 'Source Sans 3', Calibri, sans-serif;
+  padding: 3px 9px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: transparent;
+  color: rgba(255, 255, 255, 0.3);
+  cursor: pointer;
+  transition: color 0.1s;
+}
+
+.tm-chip-clear:hover {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.tm-toolbar-divider {
+  width: 1px;
+  height: 16px;
+  background: rgba(255, 255, 255, 0.1);
+  flex-shrink: 0;
+}
+
+.tm-row-count {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.3);
+  white-space: nowrap;
+}
+
+.tm-orphan-badge {
+  font-size: 11px;
+  color: #e8a84a;
+  background: rgba(232, 168, 74, 0.1);
+  border: 1px solid rgba(232, 168, 74, 0.25);
+  border-radius: 10px;
+  padding: 2px 8px;
+  white-space: nowrap;
+}
+
+/* ── Matrix + side panel row ────────────────────────────── */
+.tm-wrapper {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+.tm-matrix {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-width: 0;
+}
+
+/* ── Header (synced via JS scroll, no user scroll) ──────── */
+.tm-header-scroll {
+  overflow: hidden;
+  flex-shrink: 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  background: #141414;
+}
+
+/* ── Corner cell ────────────────────────────────────────── */
+.tm-corner-cell {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 3px;
+  padding: 8px 10px;
+  flex-shrink: 0;
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  background: #141414;
+  box-sizing: border-box;
+}
+
+.tm-corner-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.5);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.tm-corner-count {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.tm-corner-orphan {
+  color: #e8a84a;
+}
+
+/* ── Column headers ─────────────────────────────────────── */
+.tm-col-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  padding-bottom: 6px;
+  cursor: pointer;
+  border-right: 1px solid rgba(255, 255, 255, 0.06);
+  transition: background 0.12s;
+  box-sizing: border-box;
+  gap: 2px;
+}
+
+.tm-col-header:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* Leaf functions — full opacity */
+.tm-col-header.leaf .tm-col-label {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* Parent functions — visually dimmed */
+.tm-col-header.parent {
+  background: rgba(255, 255, 255, 0.015);
+}
+
+.tm-col-header.parent .tm-col-label {
+  color: rgba(255, 255, 255, 0.28);
+}
+
+/* Leaf with zero requirements — warning */
+.tm-col-header.no-reqs {
+  background: rgba(232, 112, 112, 0.06);
+}
+
+.tm-col-header.no-reqs .tm-col-label {
+  color: rgba(232, 112, 112, 0.7);
+}
+
+/* Selected column */
+.tm-col-header.selected {
+  background: rgba(107, 159, 212, 0.12);
+  border-right-color: rgba(107, 159, 212, 0.3);
+}
+
+.tm-col-header.selected .tm-col-label {
+  color: #6b9fd4;
+}
+
+.tm-col-header.selected .tm-col-count {
+  color: #6b9fd4;
+}
+
+.tm-col-label {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  font-size: 10px;
+  font-family: 'Source Code Pro', monospace;
+  white-space: nowrap;
+  max-height: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  letter-spacing: 0.02em;
+}
+
+.tm-col-count {
+  font-size: 9px;
+  color: rgba(255, 255, 255, 0.3);
+  line-height: 1;
+  text-align: center;
+}
+
+.tm-col-count-zero {
+  color: rgba(255, 255, 255, 0.15);
+}
+
+/* ⊕ parent node indicator at the top of the header */
+.tm-col-parent-mark {
+  font-size: 9px;
+  color: rgba(255, 255, 255, 0.2);
+  line-height: 1;
+  margin-top: 4px;
+  align-self: center;
+}
+
+/* ── Body scroll ─────────────────────────────────────────── */
+.tm-body-scroll {
+  flex: 1;
+  overflow: auto;
+}
+
+/* ── Section header (orphans) ───────────────────────────── */
+.tm-section-header {
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #e8a84a;
+  background: rgba(232, 168, 74, 0.07);
+  border-bottom: 1px solid rgba(232, 168, 74, 0.15);
+  letter-spacing: 0.03em;
+  box-sizing: border-box;
+}
+
+/* ── Separator between sections ─────────────────────────── */
+.tm-separator {
+  background: rgba(255, 255, 255, 0.04);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  box-sizing: border-box;
+}
+
+/* ── Rows ────────────────────────────────────────────────── */
+.tm-row {
+  cursor: pointer;
+  background: #1a1a1a;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  box-sizing: border-box;
+  transition: background 0.08s;
+}
+
+.tm-row.odd {
+  background: #1d1d1d;
+}
+
+.tm-row:hover {
+  background: #222;
+}
+
+.tm-row.selected {
+  background: rgba(107, 159, 212, 0.08);
+}
+
+/* Orphan = no FunctionID */
+.tm-row.orphan {
+  background: rgba(232, 168, 74, 0.04);
+}
+
+.tm-row.orphan:hover {
+  background: rgba(232, 168, 74, 0.08);
+}
+
+/* Invalid = FunctionID set but not found in tree */
+.tm-row.invalid {
+  background: rgba(232, 112, 112, 0.05);
+}
+
+.tm-row.invalid:hover {
+  background: rgba(232, 112, 112, 0.09);
+}
+
+/* ── Requirement label (sticky left) ────────────────────── */
+.tm-req-label {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 10px;
+  height: 100%;
+  background: inherit;
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+  box-sizing: border-box;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.tm-req-warn {
+  font-size: 11px;
+  color: #e8a84a;
+  flex-shrink: 0;
+}
+
+.tm-row.invalid .tm-req-warn {
+  color: #e87070;
+}
+
+.tm-req-id {
+  font-family: 'Source Code Pro', monospace;
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.4);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.tm-req-text {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── Cells ───────────────────────────────────────────────── */
+.tm-cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-right: 1px solid rgba(255, 255, 255, 0.04);
+  box-sizing: border-box;
+}
+
+.tm-cell.col-selected {
+  background: rgba(107, 159, 212, 0.06);
+}
+
+.tm-dot {
+  font-size: 10px;
+  line-height: 1;
+}
+
+/* ── Side panel ──────────────────────────────────────────── */
+.tm-side-panel {
+  width: 320px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  border-left: 1px solid rgba(255, 255, 255, 0.08);
+  background: #161616;
+  overflow-y: auto;
+}
+
+.tm-side-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  flex-shrink: 0;
+}
+
+.tm-side-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.5);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.tm-side-close {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 18px;
+  cursor: pointer;
+  padding: 0 4px;
+  line-height: 1;
+  transition: color 0.12s;
+}
+
+.tm-side-close:hover {
+  color: #f5f3f0;
+}
+
+.tm-side-dl {
+  padding: 12px 16px;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.tm-side-row {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.tm-side-row dt {
+  font-size: 10px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.35);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.tm-side-row dd {
+  margin: 0;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 1.5;
+}
+
+.tm-side-dot {
+  font-size: 10px;
+}
+
+/* ── Empty state ─────────────────────────────────────────── */
+.tm-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: rgba(255, 255, 255, 0.3);
+  font-size: 14px;
+}

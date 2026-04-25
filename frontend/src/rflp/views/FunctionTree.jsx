@@ -29,18 +29,18 @@ function TreeNode({ node, selectedId, onSelect, depth, statusFilter }) {
   const [expanded, setExpanded] = useState(false);
   const hasChildren = Array.isArray(node.children) && node.children.length > 0;
 
-  if (!nodeOrDescendantMatchesFilter(node, statusFilter)) return null;
-
+  const matchesSelf = !statusFilter || getNodeStatus(node) === statusFilter;
   const hasMatchingDescendant =
     !!statusFilter &&
     hasChildren &&
     node.children.some((child) => nodeOrDescendantMatchesFilter(child, statusFilter));
   const isExpanded = expanded || hasMatchingDescendant;
+  const dimmed = !!statusFilter && !matchesSelf;
 
   return (
     <div className="tree-node-wrapper">
       <div
-        className={`tree-node${selectedId === node.id ? ' selected' : ''}`}
+        className={`tree-node${selectedId === node.id ? ' selected' : ''}${dimmed ? ' dimmed' : ''}`}
         style={{ paddingLeft: `${8 + depth * 16}px` }}
       >
         <button

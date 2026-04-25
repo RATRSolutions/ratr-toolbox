@@ -131,6 +131,75 @@
   flex: 1;
 }
 
+/* ── Global søk ────────────────────────────────── */
+.rflp-search-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 5px;
+  padding: 3px 10px;
+  margin-right: 6px;
+  transition: border-color 0.15s;
+}
+
+.rflp-search-wrapper:focus-within {
+  border-color: rgba(201, 122, 26, 0.5);
+}
+
+.rflp-search-icon {
+  font-size: 14px;
+  color: #5e5c57;
+  line-height: 1;
+  user-select: none;
+}
+
+.rflp-search-input {
+  appearance: none;
+  background: none;
+  border: none;
+  outline: none;
+  color: #f5f3f0;
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  width: 160px;
+  padding: 0;
+}
+
+.rflp-search-input::placeholder {
+  color: #3a3a3a;
+}
+
+.rflp-search-input::-webkit-search-cancel-button {
+  appearance: none;
+  cursor: pointer;
+  opacity: 0.4;
+  filter: invert(1);
+}
+
+/* ── Print-knapp ───────────────────────────────── */
+.rflp-print-btn {
+  appearance: none;
+  background: none;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 4px;
+  color: #5e5c57;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  padding: 3px 10px;
+  cursor: pointer;
+  margin-right: 6px;
+  transition: color 0.15s, border-color 0.15s;
+  white-space: nowrap;
+}
+
+.rflp-print-btn:hover {
+  color: #c8c5bf;
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
 .rflp-tab-file-reset {
   appearance: none;
   background: none;
@@ -153,34 +222,96 @@
   border-color: rgba(255, 255, 255, 0.2);
 }
 
-/* ── View-innhold ──────────────────────────────── */
-.rflp-view-content {
+/* ── Hoved-layout ──────────────────────────────── */
+.rflp-main {
   display: flex;
   flex: 1;
   overflow: hidden;
-  padding: 0 16px;
-  box-sizing: border-box;
 }
 
+/* ── Tre-panel (alltid synlig, collapsible) ────── */
 .rflp-tree-panel {
   width: 25%;
+  min-width: 200px;
+  max-width: 360px;
   flex-shrink: 0;
   border-right: 1px solid rgba(255, 255, 255, 0.07);
   display: flex;
+  flex-direction: row;
+  overflow: hidden;
+  transition: width 0.2s ease, min-width 0.2s ease;
+}
+
+.rflp-tree-panel.collapsed {
+  width: 32px;
+  min-width: 32px;
+}
+
+.rflp-tree-panel-inner {
+  flex: 1;
+  display: flex;
   flex-direction: column;
   overflow: hidden;
+  min-width: 0;
+}
+
+.rflp-tree-panel.collapsed .rflp-tree-panel-inner {
+  display: none;
+}
+
+.rflp-tree-collapse-btn {
+  appearance: none;
+  background: none;
+  border: none;
+  border-left: 1px solid rgba(255, 255, 255, 0.07);
+  color: #5e5c57;
+  font-size: 14px;
+  cursor: pointer;
+  padding: 0 6px;
+  flex-shrink: 0;
+  transition: color 0.15s, background 0.15s;
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+}
+
+.rflp-tree-collapse-btn:hover {
+  color: #c8c5bf;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.rflp-clear-filter {
+  appearance: none;
+  background: rgba(201, 122, 26, 0.08);
+  border: none;
+  border-bottom: 1px solid rgba(201, 122, 26, 0.2);
+  color: #c97a1a;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  padding: 7px 16px;
+  text-align: left;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.15s;
+}
+
+.rflp-clear-filter:hover {
+  background: rgba(201, 122, 26, 0.14);
+}
+
+/* ── Innholdspanel ─────────────────────────────── */
+.rflp-content-panel {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
 }
 
 .rflp-detail-panel {
   flex: 1;
   overflow-y: auto;
-}
-
-.rflp-full-panel {
-  flex: 1;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
 }
 
 /* ── Loading / Error ───────────────────────────── */
@@ -312,6 +443,11 @@
 .tree-node.selected {
   background: rgba(201, 122, 26, 0.1);
   border-left: 2px solid #c97a1a;
+}
+
+.tree-node.dimmed .tree-label,
+.tree-node.dimmed .node-id-tag {
+  opacity: 0.35;
 }
 
 .tree-expand {
@@ -794,4 +930,116 @@
 .co-rationale-label {
   color: #5e5c57;
   font-style: normal;
+}
+
+/* ── Print ─────────────────────────────────────── */
+@media print {
+  @page {
+    margin: 20mm 18mm;
+  }
+
+  body {
+    background: #fff !important;
+    color: #111 !important;
+  }
+
+  .rflp-viewer {
+    height: auto;
+    overflow: visible;
+    background: #fff;
+    color: #111;
+  }
+
+  .rflp-tab-bar,
+  .rflp-tree-panel,
+  .rflp-tree-collapse-btn,
+  .rflp-clear-filter,
+  .rflp-print-btn,
+  .rflp-tab-file-reset,
+  .rflp-search-wrapper {
+    display: none !important;
+  }
+
+  .rflp-main {
+    display: block;
+    overflow: visible;
+  }
+
+  .rflp-content-panel {
+    overflow: visible;
+    width: 100%;
+  }
+
+  .rflp-detail-panel {
+    overflow: visible;
+  }
+
+  /* Reset dark colours to print-friendly tones */
+  .detail-panel,
+  .req-table-wrapper,
+  .concept-rationale,
+  .context-view,
+  .traceability-wrapper,
+  .search-results {
+    padding: 0;
+    background: #fff;
+    color: #111;
+  }
+
+  .detail-name,
+  .detail-id,
+  .section-title,
+  .field-value,
+  .tree-label,
+  .cd-name,
+  .cd-description,
+  .compact-main-text,
+  .search-result-main {
+    color: #111 !important;
+  }
+
+  .field-label,
+  .breadcrumb-link,
+  .breadcrumb-current,
+  .meta-chip,
+  .cd-sublabel,
+  .search-result-id,
+  .search-result-badge,
+  .search-result-sub {
+    color: #555 !important;
+  }
+
+  .detail-header,
+  .section-toggle,
+  .section-body,
+  .detail-metadata,
+  .cd-sub-item,
+  .detail-section {
+    background: #fff !important;
+    border-color: #ddd !important;
+  }
+
+  .functional-intent {
+    background: #f8f8f8 !important;
+    border-left-color: #888 !important;
+    color: #222 !important;
+  }
+
+  .section-toggle {
+    page-break-after: avoid;
+  }
+
+  .section-body {
+    display: block !important;
+  }
+
+  a, button {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .search-highlight {
+    background: #ffe08a;
+    color: #111;
+  }
 }
