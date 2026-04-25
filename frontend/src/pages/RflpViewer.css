@@ -956,7 +956,9 @@
   .rflp-clear-filter,
   .rflp-print-btn,
   .rflp-tab-file-reset,
-  .rflp-search-wrapper {
+  .rflp-search-wrapper,
+  .req-toolbar,
+  .tm-toolbar {
     display: none !important;
   }
 
