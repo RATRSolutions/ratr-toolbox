@@ -932,8 +932,24 @@
   font-style: normal;
 }
 
+/* ── Print-overskrift (skjult i nettleser, synlig ved utskrift) ── */
+.rflp-print-header {
+  display: none;
+}
+
 /* ── Print ─────────────────────────────────────── */
 @media print {
+  .rflp-print-header {
+    display: block;
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #111;
+    padding: 0 0 12px 0;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #111;
+  }
+
   @page {
     margin: 20mm 18mm;
   }
@@ -976,12 +992,29 @@
     overflow: visible;
   }
 
+  /* Let all scroll containers expand to full content height */
+  .req-view,
+  .req-table-wrapper,
+  .tm-outer,
+  .tm-wrapper,
+  .tm-matrix,
+  .tm-header-scroll,
+  .tm-body-scroll,
+  .cr-view,
+  .ctxv-view,
+  .search-results,
+  .rflp-content-panel,
+  .rflp-detail-panel {
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+  }
+
   /* Reset dark colours to print-friendly tones */
   .detail-panel,
   .req-table-wrapper,
-  .concept-rationale,
-  .context-view,
-  .traceability-wrapper,
+  .cr-view,
+  .ctxv-view,
   .search-results {
     padding: 0;
     background: #fff;

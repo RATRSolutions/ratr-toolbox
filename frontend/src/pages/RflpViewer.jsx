@@ -52,6 +52,17 @@ function RflpViewer() {
     return () => { cancelled = true; };
   }, [file]);
 
+  useEffect(() => {
+    const before = () => { document.title = ''; };
+    const after = () => { document.title = 'Verktøykasse – ratr solutions'; };
+    window.addEventListener('beforeprint', before);
+    window.addEventListener('afterprint', after);
+    return () => {
+      window.removeEventListener('beforeprint', before);
+      window.removeEventListener('afterprint', after);
+    };
+  }, []);
+
   const searchResults = useMemo(() => {
     if (!model || !searchQuery.trim()) return null;
     return model.search(searchQuery);
@@ -168,6 +179,12 @@ function RflpViewer() {
         </div>
 
         <div className="rflp-content-panel">
+          <div className="rflp-print-header">
+            {searchResults
+              ? `Søkeresultater: "${searchQuery}"`
+              : TABS.find((t) => t.id === activeTab)?.label}
+          </div>
+
           {searchResults ? (
             <GlobalSearch
               results={searchResults}
