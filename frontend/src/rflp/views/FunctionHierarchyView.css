@@ -1,0 +1,74 @@
+.fhv-container {
+  flex: 1;
+  height: 100%;
+  background: #141414;
+}
+
+.fhv-print-only {
+  display: none;
+}
+
+/* Override React Flow defaults to match app theme */
+.fhv-container .react-flow__background {
+  background: #141414;
+}
+
+.fhv-container .react-flow__edge-path {
+  stroke: rgba(255, 255, 255, 0.15);
+  stroke-width: 1.5;
+}
+
+.fhv-controls {
+  background: #1e1e1e;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+}
+
+.fhv-controls button {
+  background: #1e1e1e;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  color: #c8c5bf;
+}
+
+.fhv-controls button:hover {
+  background: #252525;
+  color: #f5f3f0;
+}
+
+.fhv-controls button:last-child {
+  border-bottom: none;
+}
+
+.fhv-le-toggle {
+  background: #1e1e1e;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 6px;
+  color: #c8c5bf;
+  font-family: 'Source Sans 3', Calibri, sans-serif;
+  font-size: 13px;
+  padding: 6px 12px;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+
+.fhv-le-toggle:hover {
+  background: #252525;
+  color: #f5f3f0;
+  border-color: rgba(255, 255, 255, 0.22);
+}
+
+.fhv-le-toggle.active {
+  border-color: rgba(74, 158, 106, 0.5);
+  color: #4a9e6a;
+}
+
+@media print {
+  .fhv-screen-only {
+    display: none !important;
+  }
+
+  .fhv-print-only {
+    display: block;
+    padding: 0;
+  }
+}

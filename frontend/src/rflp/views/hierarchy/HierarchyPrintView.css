@@ -1,0 +1,86 @@
+.hpv-root {
+  font-family: 'Source Sans 3', Calibri, sans-serif;
+  color: #111;
+  padding: 0;
+}
+
+.hpv-func {
+  margin-bottom: 4px;
+}
+
+.hpv-func--root {
+  margin-bottom: 12px;
+}
+
+.hpv-func-header {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 6px 10px;
+  background: #f0f0f0;
+  border-left: 3px solid #888;
+  border-radius: 2px;
+  break-inside: avoid;
+  break-after: avoid;
+}
+
+.hpv-func--root > .hpv-func-header {
+  background: #e0e0e0;
+  border-left-color: #444;
+}
+
+.hpv-func-id {
+  font-family: 'DM Mono', 'Courier New', monospace;
+  font-size: 10px;
+  color: #666;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.hpv-func-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: #111;
+}
+
+.hpv-func--root > .hpv-func-header .hpv-func-name {
+  font-size: 14px;
+}
+
+.hpv-le {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 3px 10px 3px 14px;
+  border-left: 3px solid #4a9e6a;
+  margin-top: 2px;
+  margin-bottom: 14px;
+  break-inside: avoid;
+  break-before: avoid;
+}
+
+.hpv-le-label {
+  font-family: 'DM Mono', 'Courier New', monospace;
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #4a9e6a;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.hpv-le-name {
+  font-size: 12px;
+  color: #333;
+}
+
+.hpv-children {
+  margin-left: 20px;
+  margin-top: 0;
+  padding-left: 12px;
+  border-left: 1px solid #ccc;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}

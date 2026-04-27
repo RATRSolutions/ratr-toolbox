@@ -9,10 +9,12 @@ import ConceptRationale from '../rflp/views/ConceptRationale';
 import ContextView from '../rflp/views/ContextView';
 import TraceabilityMatrix from '../rflp/views/TraceabilityMatrix';
 import GlobalSearch from '../rflp/views/GlobalSearch';
+import FunctionHierarchyView from '../rflp/views/FunctionHierarchyView';
 import './RflpViewer.css';
 
 const TABS = [
   { id: 'functions',    label: 'Funksjonsoversikt',  enabled: true },
+  { id: 'hierarchy',    label: 'Funksjonshierarki',  enabled: true },
   { id: 'requirements', label: 'Kravspesifikasjon',   enabled: true },
   { id: 'traceability', label: 'Traceability',         enabled: true },
   { id: 'concept',      label: 'Konseptbegrunnelse',  enabled: true },
@@ -202,6 +204,13 @@ function RflpViewer() {
                     onSelect={setSelectedId}
                   />
                 </div>
+              )}
+
+              {activeTab === 'hierarchy' && (
+                <FunctionHierarchyView
+                  model={model}
+                  onSelectFunction={(funcId) => navigateToFunction(funcId, 'functions')}
+                />
               )}
 
               {activeTab === 'requirements' && (
